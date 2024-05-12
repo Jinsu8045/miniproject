@@ -40,7 +40,7 @@ public class MemberDao {
                 MemberDto memberDto = new MemberDto();
                 memberDto.setId(rs.getString("ID")); //
                 list.add(memberDto.getId());
-                System.out.println(list);
+//                System.out.println(list);
             }
 
         } catch (SQLException e) {
@@ -93,4 +93,160 @@ public class MemberDao {
 
         return result;
     }
+
+
+    public boolean findPw(String id, String name) {
+        boolean result = false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT MEMBER_NUM FROM MEMBERS WHERE ID = ? AND NAME = ? ";
+            ps = con.prepareStatement(sql);
+
+
+            ps.setString(1, id);
+            ps.setString(2, name);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                result = true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        } finally {
+            dbcp.freeConnection(con, ps);
+        }
+        return result;
+    }
+
+
+
+    public boolean login(String id, String pw) {
+        boolean result = false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT MEMBER_NUM FROM MEMBERS WHERE ID = ? AND PW = ?";
+            ps = con.prepareStatement(sql);
+
+
+            ps.setString(1, id);
+            ps.setString(2, pw);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                result = true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        } finally {
+            dbcp.freeConnection(con, ps);
+        }
+        return result;
+    }
+
+
+
+    public MemberDto selectOne(String id) {
+        MemberDto rsDto = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "select * from members where ID = ?";
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1,id);
+
+            rs = ps.executeQuery();
+            if(rs.next()){
+                rsDto = new MemberDto();
+                rsDto.setMemberNum(rs.getString("MEMBER_NUM"));
+                rsDto.setId(rs.getString("ID"));
+                rsDto.setPw(rs.getString("PW"));
+                rsDto.setName(rs.getString("NAME"));
+                rsDto.setEmail(rs.getString("EMAIL"));
+                rsDto.setAdmin(rs.getInt("ADMIN"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("select error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        }finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+        return rsDto;
+    }
+
+
+    public MemberDto loginUser(String loginUser) {
+        MemberDto rsDto = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "select * from members where MEMBER_NUM = ?";
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1,loginUser);
+
+            rs = ps.executeQuery();
+            if(rs.next()){
+                rsDto = new MemberDto();
+                rsDto.setMemberNum(rs.getString("MEMBER_NUM"));
+                rsDto.setId(rs.getString("ID"));
+                rsDto.setPw(rs.getString("PW"));
+                rsDto.setName(rs.getString("NAME"));
+                rsDto.setEmail(rs.getString("EMAIL"));
+                rsDto.setAdmin(rs.getInt("ADMIN"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("select error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        }finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+        return rsDto;
+    }
+
+
+
+
+
+
 }

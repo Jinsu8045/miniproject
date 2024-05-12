@@ -10,7 +10,7 @@ public class MemberDto {
     //    EMAIL VARCHAR2(100),
     //    ADMIN NUMBER
 
-    private int memberNum;
+    private String memberNum;
     private String id; //null
     private String pw; //null
     private String name; //null
@@ -27,11 +27,11 @@ public class MemberDto {
         this.email = email;
     }
 
-    public int getMemberNum() {
+    public String getMemberNum() {
         return memberNum;
     }
 
-    public void setMemberNum(int memberNum) {
+    public void setMemberNum(String memberNum) {
         this.memberNum = memberNum;
     }
 
