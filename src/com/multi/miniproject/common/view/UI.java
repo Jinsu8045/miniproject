@@ -11,17 +11,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class UI {
-  JFrame f = new JFrame();
+    JFrame f = new JFrame();
     private String loginUser = null;
 
 
-    public void p01(){
+    public void p01() {
 //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -75,7 +73,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
-    public void p01_1(){            //회원가입
+
+    public void p01_1() {            //회원가입
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -147,9 +146,9 @@ public class UI {
                 String id = t2.getText();
 
                 MemberDao memberDao = new MemberDao();
-                if(memberDao.idCheck(id)){
+                if (memberDao.idCheck(id)) {
                     JOptionPane.showMessageDialog(f, "이미 사용중인 아이디입니다.");
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(f, "사용 가능한 아이디입니다.");
 
                 }
@@ -169,31 +168,31 @@ public class UI {
 
 
                 String selectedValue = combo2.getSelectedItem().toString();
-                if(selectedValue.equals("직접입력")){
+                if (selectedValue.equals("직접입력")) {
                     emailSite = t7.getText();
-                }else{
+                } else {
                     emailSite = selectedValue;
                 }
 
                 MemberDao memberDao = new MemberDao();
                 boolean startsWithAt = emailSite.startsWith("@");
 
-                if(pw.equals(pw2) && memberDao.idCheck(id)==false && startsWithAt==true){
+                if (pw.equals(pw2) && memberDao.idCheck(id) == false && startsWithAt == true) {
                     MemberDto memberDto = new MemberDto(id, pw, name, emailID, emailSite);
                     int result = memberDao.joinMember(memberDto);
-                    if(result == 1){
+                    if (result == 1) {
                         JOptionPane.showMessageDialog(f, "회원가입 완료. 로그인 해주세요.");
                         p02();
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(f, "회원가입 실패. 재시도 해주세요.");
                     }
 
-                }else if (!pw.equals(pw2)){
-                    JOptionPane.showMessageDialog(f,"비밀번호 값이 일치하지 않습니다.");
-                }else if (startsWithAt==false){
-                    JOptionPane.showMessageDialog(f,"올바르지 않은 이메일 형식입니다(@필수)");
-                }else{
-                    JOptionPane.showMessageDialog(f,"중복된 아이디입니다.");
+                } else if (!pw.equals(pw2)) {
+                    JOptionPane.showMessageDialog(f, "비밀번호 값이 일치하지 않습니다.");
+                } else if (startsWithAt == false) {
+                    JOptionPane.showMessageDialog(f, "올바르지 않은 이메일 형식입니다(@필수)");
+                } else {
+                    JOptionPane.showMessageDialog(f, "중복된 아이디입니다.");
                 }
 
             }
@@ -204,7 +203,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
-    public void p02(){
+
+    public void p02() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -262,18 +262,18 @@ public class UI {
                 memberDto.setPw(pw);
 
                 MemberDao memberDao = new MemberDao();
-                boolean result = memberDao.login(id,pw);
+                boolean result = memberDao.login(id, pw);
 
-                if(result){
-                    JOptionPane.showMessageDialog(f,"로그인 성공");
+                if (result) {
+                    JOptionPane.showMessageDialog(f, "로그인 성공");
                     loginUser = memberDao.selectOne(id).getMemberNum();
                     p03();
-                }else if(id.equals("")||pw.equals("")){
-                    JOptionPane.showMessageDialog(f,"입력되지 않은 값이 있습니다");
-                }else if(memberDao.idCheck(id)==false){
-                    JOptionPane.showMessageDialog(f,"존재하지 않는 아이디 입니다.");
-                }else{
-                    JOptionPane.showMessageDialog(f,"아이디와 비밀번호가 일치하지 않습니다.");
+                } else if (id.equals("") || pw.equals("")) {
+                    JOptionPane.showMessageDialog(f, "입력되지 않은 값이 있습니다");
+                } else if (memberDao.idCheck(id) == false) {
+                    JOptionPane.showMessageDialog(f, "존재하지 않는 아이디 입니다.");
+                } else {
+                    JOptionPane.showMessageDialog(f, "아이디와 비밀번호가 일치하지 않습니다.");
                 }
 
 
@@ -285,16 +285,16 @@ public class UI {
             public void actionPerformed(ActionEvent e) {
                 String id = JOptionPane.showInputDialog("아이디를 입력하세요");
                 MemberDao memberDao = new MemberDao();
-                if(memberDao.idCheck(id)){
+                if (memberDao.idCheck(id)) {
                     String name = JOptionPane.showInputDialog("이름을 입력하세요");
                     boolean result = memberDao.findPw(id, name);
-                    if(result==true){
-                        JOptionPane.showMessageDialog(f,"ID : "+ id + " PW : " + (memberDao.selectOne(id)).getPw());
-                    }else{
-                        JOptionPane.showMessageDialog(f,"일치하는 회원정보가 없습니다.");
+                    if (result == true) {
+                        JOptionPane.showMessageDialog(f, "ID : " + id + " PW : " + (memberDao.selectOne(id)).getPw());
+                    } else {
+                        JOptionPane.showMessageDialog(f, "일치하는 회원정보가 없습니다.");
                     }
-                }else{
-                    JOptionPane.showMessageDialog(f,"존재하지 않는 아이디 입니다.");
+                } else {
+                    JOptionPane.showMessageDialog(f, "존재하지 않는 아이디 입니다.");
                 }
 
             }
@@ -313,7 +313,7 @@ public class UI {
         f.setVisible(true);
     } //p02() 로그인페이지
 
-    public void p03(){
+    public void p03() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -396,7 +396,7 @@ public class UI {
         f.setVisible(true);
     } //p03() : 메뉴
 
-    public void p04(){
+    public void p04() {
 
         MemberDao dao = new MemberDao();
 
@@ -421,8 +421,8 @@ public class UI {
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         JLabel l2 = new JLabel("이름 " + dao.loginUser(loginUser).getName());
-        JLabel l3 = new JLabel("아이디(이메일)" + dao.loginUser(loginUser).getId()+
-                                                    "("+dao.loginUser(loginUser).getEmail()+")");
+        JLabel l3 = new JLabel("아이디(이메일)" + dao.loginUser(loginUser).getId() +
+                "(" + dao.loginUser(loginUser).getEmail() + ")");
         //이미지
         JLabel img1 = new JLabel("이미지");
 //        img1.setIcon(new ImageIcon("images/img.jpg"));
@@ -475,7 +475,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } //p04() : 마이페이지
-    public void p04_1(){
+
+    public void p04_1() {
 
         MemberDao dao = new MemberDao();
 
@@ -522,9 +523,9 @@ public class UI {
         JComboBox<String> combo2 = new JComboBox<>(g2.toArray(new String[0]));
 
 
-        if(g2.contains(dao.loginUser(loginUser).getEmailSite())){
+        if (g2.contains(dao.loginUser(loginUser).getEmailSite())) {
             // 작성불가/jbox 일치시키기
-        }else{
+        } else {
             t7.setText(dao.loginUser(loginUser).getEmailSite());
         }
 
@@ -563,24 +564,24 @@ public class UI {
                 String emailSite;
 
                 String selectedValue = combo2.getSelectedItem().toString();
-                if(selectedValue.equals("직접입력")){
+                if (selectedValue.equals("직접입력")) {
                     emailSite = t7.getText();
-                }else{
+                } else {
                     emailSite = selectedValue;
                 }
-                if(dao.loginUser(loginUser).getPw().equals(pw)) {
+                if (dao.loginUser(loginUser).getPw().equals(pw)) {
 
                     MemberDto memberDto = new MemberDto(l21.getText(), pwNew, name, emailID, emailSite);
                     MemberDao memberDao = new MemberDao();
                     int result = memberDao.updateUser(memberDto);
 
-                    if(result==1){
+                    if (result == 1) {
                         JOptionPane.showMessageDialog(f, "수정되었습니다.");
                         p04();
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(f, "업데이트 실패. 다시 시도해주세요.");
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(f, "비밀번호가 올바르지 않습니다");
                 }
 
@@ -592,7 +593,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p04_1() : 프로필 재설정
-    public void p04_2(){
+
+    public void p04_2() {
         //JFrame 정의
 //        f = new JFrame();
 
@@ -604,7 +606,6 @@ public class UI {
             int digit = r.nextInt(16); // 0부터 15 사이의 난수 생성
             rString.append(Integer.toHexString(digit)); // 16진수로 변환하여 추가
         }
-
 
 
         f.getContentPane().removeAll();
@@ -679,7 +680,7 @@ public class UI {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(cb1.isSelected()){//checkbox 처리확인후
+                if (cb1.isSelected()) {//checkbox 처리확인후
                     String pw = t3.getText();
                     String answerR = t4.getText();
                     String rString = l41.getText();
@@ -687,23 +688,22 @@ public class UI {
                     boolean pwMatch = dao.loginUser(loginUser).getPw().equals(pw);
                     boolean rResult = answerR.equals(rString);
 
-                    if(pwMatch&&rResult) {
+                    if (pwMatch && rResult) {
 
                         int result = dao.deleteMember(loginUser);
-                        if(result==1){
+                        if (result == 1) {
 
-                        JOptionPane.showMessageDialog(f, "탈퇴 처리 되었습니다. 메인화면으로 돌아갑니다.");
-                        p01();
-                        }else{
+                            JOptionPane.showMessageDialog(f, "탈퇴 처리 되었습니다. 메인화면으로 돌아갑니다.");
+                            p01();
+                        } else {
                             JOptionPane.showMessageDialog(f, "처리 실패. 다시 시도해주세요.");
                         }
-                    }else if(pwMatch==false){
+                    } else if (pwMatch == false) {
                         JOptionPane.showMessageDialog(f, "비밀번호 오류. 다시 입력해주세요");
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(f, "자동입력방지 값이 일치하지 않습니다.");
                     }
-                }
-                else{
+                } else {
                     JOptionPane.showMessageDialog(f, "주의사항을 다시 확인해주세요.");
                 }
             }
@@ -713,7 +713,7 @@ public class UI {
         f.setVisible(true);
     } // p04_2() : 회원탈퇴
 
-    public void p05(){
+    public void p05() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -781,7 +781,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p05() : 리뷰
-    public void p05_1(){
+
+    public void p05_1() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -842,7 +843,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p05_1() : 리뷰작성
-    public void p05_2(){
+
+    public void p05_2() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -893,7 +895,7 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(true){
+                if (true) {
                     JOptionPane.showMessageDialog(f, "수정되었습니다.");
                     p05();
                 }
@@ -903,7 +905,7 @@ public class UI {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(true){
+                if (true) {
                     JOptionPane.showMessageDialog(f, "삭제되었습니다.");
                     p05();
                 }
@@ -916,7 +918,7 @@ public class UI {
         f.setVisible(true);
     } // p05_2() : 리뷰상세페이지
 
-    public void p06(){
+    public void p06() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1009,7 +1011,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p06() : 상품조회
-    public void p06_1(){
+
+    public void p06_1() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1078,20 +1081,20 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(f,"필터가 등록되었습니다.");
+                JOptionPane.showMessageDialog(f, "필터가 등록되었습니다.");
 
                 PresetDao presetDao = new PresetDao(); // 쪽지 전달자!!
                 PresetDto presetDto = new PresetDto(); // 쪽지
                 //설문결과를 담아내는 작업 (빈쪽지를 채우는=set하는 작업)
                 //presetDto.setPresetNum();         //안해도 된다! 어차피 오라클이 대신해주니까
                 presetDto.setMemberNum(loginUser);
-                presetDto.setPresetComfort(r11.isSelected() ? 1 : 0 );
+                presetDto.setPresetComfort(r11.isSelected() ? 1 : 0);
                 presetDto.setPresetWeight(r21.isSelected() ? 1 : 0);
                 presetDto.setPresetPassenger(r31.isSelected() ? 1 : 0);
 
                 // DAO를 거친 후 result값 리턴받기
                 int result = presetDao.insert(presetDto); //쪽지를 insert (DAO가 insert한다 DTO(쪽지)를 어디에? DB에), result에 성공여부만 알려드림.
-                if(result == 1) JOptionPane.showMessageDialog(f, "필터가 등록되었습니다: "+presetDto);
+                if (result == 1) JOptionPane.showMessageDialog(f, "필터가 등록되었습니다: " + presetDto);
                 else JOptionPane.showMessageDialog(f, "필터가 등록되지 않았습니다.");
 
                 p06();
@@ -1103,7 +1106,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p06_1() : 필터등록페이지
-    public void p06_2(){
+
+    public void p06_2() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1147,22 +1151,53 @@ public class UI {
 
         b0.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                p06();
-            }
+            public void actionPerformed(ActionEvent e) { p06(); }
         }); //b0.addActionListener
 
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_1();
+                // 수정버튼 기능
+                String presetNum = JOptionPane.showInputDialog("수정하실 필터를 선택해 주세요 예)PR1");
+
+                PresetDto presetDto = new PresetDto();
+                PresetDao presetDao = new PresetDao();
+
+                //
+                presetDto = presetDao.selectOne(presetNum);
+                presetDto.setPresetComfort(Integer.parseInt(JOptionPane.showInputDialog(null, "승차감 편함/보통", presetDto.getPresetComfort())));
+                presetDto.setPresetWeight(Integer.parseInt(JOptionPane.showInputDialog(null, "적재량 많음/적음", presetDto.getPresetWeight())));
+                presetDto.setPresetPassenger(Integer.parseInt(JOptionPane.showInputDialog(null, "승객3인 이상 O/X", presetDto.getPresetPassenger())));
+
+
+                int result = presetDao.update(presetDto);
+
+                if(result == 1) {
+                    JOptionPane.showMessageDialog(f, "필터가 수정되었습니다.");
+                } else {
+                    JOptionPane.showMessageDialog(f, "필터 수정에 실패하였습니다.");
+                }
+
+
+
+                // p06_1();
             }
         }); //b1.addActionListener
 
+
+
         b2.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(f, "선택하신 필터가 삭제되었습니다.");
+            public void actionPerformed (ActionEvent e){
+                //삭제버튼 기능
+                String presetNum = JOptionPane.showInputDialog("삭제하실 필터를 선택해 주세요. 예)PR1");
+
+                PresetDao presetDao = new PresetDao();
+
+                int result = presetDao.delete(presetNum);
+                if (result == 1) JOptionPane.showMessageDialog(f, "해당 필터가 삭제되었습니다.");
+                else JOptionPane.showMessageDialog(f, "필터삭제에 실패했습니다.");
+
                 p06();
             }
         }); //b2.addActionListener
@@ -1173,7 +1208,7 @@ public class UI {
         f.setVisible(true);
     } // p06_2() : 필터수정삭제페이지
 
-    public void p07(){
+    public void p07() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1224,7 +1259,6 @@ public class UI {
         f.add(b1);
 
 
-
         b0.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1235,6 +1269,11 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String presetNum = JOptionPane.showInputDialog("적용하실 필터를 입력해 주세요");
+                PresetDao presetDao = new PresetDao();
+                PresetDto rsDto = presetDao.selectOne(presetNum);
+                if (rsDto == null) JOptionPane.showMessageDialog(f, presetNum + " 필터 조건을 불러오는데 실패하였습니다");
+
                 p07_1();
             }
         }); //b1.addActionListener
@@ -1245,7 +1284,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p07() : 필터적용
-    public void p07_1(){
+
+    public void p07_1() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1330,7 +1370,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p07_1() : 필터활성화 후 상품조회
-    public void p07_2(){
+
+    public void p07_2() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1393,7 +1434,7 @@ public class UI {
         f.setVisible(true);
     } // p07_2() : 상품정보제공
 
-    public void p08(){
+    public void p08() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1480,7 +1521,7 @@ public class UI {
         f.setVisible(true);
     } // p08() : 결제
 
-    public void p08A_1(){
+    public void p08A_1() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1503,7 +1544,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // <미사용>p08A_1() : 결제-카드/무통장입금 선택
-    public void p08A_2(){
+
+    public void p08A_2() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1526,7 +1568,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // <미사용>p08A_2() : 결제-카드선택시
-    public void p08A_3(){
+
+    public void p08A_3() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1550,7 +1593,7 @@ public class UI {
         f.setVisible(true);
     } // <미사용>p08A_3() : 결제-카드등록및
 
-    public void p08B_2(){
+    public void p08B_2() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1574,7 +1617,7 @@ public class UI {
         f.setVisible(true);
     } // <미사용>p08B_2() : 결제-은행선택시
 
-    public void p09(){
+    public void p09() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1652,7 +1695,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p09() : 결제-결제완료
-    public void p10(){
+
+    public void p10() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1698,7 +1742,8 @@ public class UI {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     } // p10() : 결제-결제취소
-    public void p11(){
+
+    public void p11() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1745,7 +1790,7 @@ public class UI {
         f.setVisible(true);
     } //p11() : 환불요청 접수
 
-    public void p03B(){
+    public void p03B() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1819,7 +1864,7 @@ public class UI {
         f.setVisible(true);
     } // p03B() : 관리자메뉴
 
-    public void p03B_1(){
+    public void p03B_1() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1961,7 +2006,7 @@ public class UI {
         f.setVisible(true);
     } // p03B_1() : 회원관리
 
-    public void p03B_2(){
+    public void p03B_2() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -2051,7 +2096,7 @@ public class UI {
                 int criteria = combo1.getSelectedIndex();
                 ProductDao productDao = new ProductDao();
                 ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
-                JOptionPane.showMessageDialog(f, "[요청하신 검색어에 대한 검색 결과입니다.]"+list);
+                JOptionPane.showMessageDialog(f, "[요청하신 검색어에 대한 검색 결과입니다.]" + list);
 
             }
         }); //b11.addActionListener
@@ -2082,7 +2127,7 @@ public class UI {
 
                 // DAO를 거친 후 result값 리턴받기
                 int result = productDao.insert(productDto);
-                if(result == 1) JOptionPane.showMessageDialog(f, "상품이 등록되었습니다: "+productDto);
+                if (result == 1) JOptionPane.showMessageDialog(f, "상품이 등록되었습니다: " + productDto);
                 else JOptionPane.showMessageDialog(f, "상품이 등록되지 않았습니다.");
             }
         }); //b3.addActionListener
@@ -2097,7 +2142,7 @@ public class UI {
 
                 // DAO를 거친 후 result값 리턴받기
                 int result = productDao.delete(productNum);
-                if(result == 1) JOptionPane.showMessageDialog(f, "해당 상품이 삭제되었습니다.");
+                if (result == 1) JOptionPane.showMessageDialog(f, "해당 상품이 삭제되었습니다.");
                 else JOptionPane.showMessageDialog(f, "해당 상품이 삭제되지 않았습니다.");
             }
         }); //b32.addActionListener
@@ -2109,7 +2154,7 @@ public class UI {
                 String tmp = "P1";
                 ProductDao productDao = new ProductDao();
                 ProductDto rsDto = productDao.selectOne(tmp);
-                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 해당 상품(" + tmp + ")의 상세정보 조회에 실패했습니다.");
+                if (rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 해당 상품(" + tmp + ")의 상세정보 조회에 실패했습니다.");
                 else JOptionPane.showMessageDialog(f, rsDto);
 
             }
@@ -2149,7 +2194,7 @@ public class UI {
         f.setVisible(true);
     } // p03B_2() : 상품관리
 
-    public void p03B_3(){
+    public void p03B_3() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -2290,7 +2335,7 @@ public class UI {
         f.setVisible(true);
     } // p03B_3() : 주문내역관리
 
-    public void p03B_4(){
+    public void p03B_4() {
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
