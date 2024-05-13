@@ -9,9 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UI {
+    JFrame f = new JFrame();
     public void p01(){
 //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -63,7 +66,9 @@ public class UI {
     }
     public void p01_1(){            //회원가입
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("회원가입 페이지");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -182,7 +187,9 @@ public class UI {
     }
     public void p02(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -254,7 +261,9 @@ public class UI {
 
     public void p03(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -335,7 +344,9 @@ public class UI {
 
     public void p04(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -407,7 +418,9 @@ public class UI {
     } //p04() : 마이페이지
     public void p04_1(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -478,7 +491,9 @@ public class UI {
     } // p04_1() : 프로필 재설정
     public void p04_2(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -559,7 +574,9 @@ public class UI {
 
     public void p05(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -625,7 +642,9 @@ public class UI {
     } // p05() : 리뷰
     public void p05_1(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -684,7 +703,9 @@ public class UI {
     } // p05_1() : 리뷰작성
     public void p05_2(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
@@ -756,7 +777,9 @@ public class UI {
 
     public void p06(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.CYAN);
@@ -847,7 +870,9 @@ public class UI {
     } // p06() : 상품조회
     public void p06_1(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.CYAN);
@@ -924,7 +949,9 @@ public class UI {
     } // p06_1() : 필터등록페이지
     public void p06_2(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.CYAN);
@@ -992,7 +1019,9 @@ public class UI {
 
     public void p07(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.CYAN);
@@ -1062,7 +1091,9 @@ public class UI {
     } // p07() : 필터적용
     public void p07_1(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.CYAN);
@@ -1145,7 +1176,9 @@ public class UI {
     } // p07_1() : 필터활성화 후 상품조회
     public void p07_2(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.CYAN);
@@ -1206,7 +1239,9 @@ public class UI {
 
     public void p08(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
@@ -1291,7 +1326,9 @@ public class UI {
 
     public void p08A_1(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
@@ -1312,7 +1349,9 @@ public class UI {
     } // <미사용>p08A_1() : 결제-카드/무통장입금 선택
     public void p08A_2(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
@@ -1333,7 +1372,9 @@ public class UI {
     } // <미사용>p08A_2() : 결제-카드선택시
     public void p08A_3(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
@@ -1355,7 +1396,9 @@ public class UI {
 
     public void p08B_2(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
@@ -1377,7 +1420,9 @@ public class UI {
 
     public void p09(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
@@ -1453,7 +1498,9 @@ public class UI {
     } // p09() : 결제-결제완료
     public void p10(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
@@ -1497,7 +1544,9 @@ public class UI {
     } // p10() : 결제-결제취소
     public void p11(){
         //JFrame 정의
-        JFrame f = new JFrame();
+//        f = new JFrame();
+        f.getContentPane().removeAll();
+        f.repaint();
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.GREEN);
