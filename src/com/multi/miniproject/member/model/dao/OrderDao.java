@@ -65,11 +65,11 @@ public class OrderDao {
             rs = ps.executeQuery();
             if(rs.next()){// Order(N):Member(1)
                 rsDto = new MemberDto();
-                rsDto.setMemberNum(rs.getInt("MEMBER_NUM"));
+                rsDto.setMemberNum(rs.getString("MEMBER_NUM"));
                 rsDto.setId(rs.getString("ID"));
                 rsDto.setPw(rs.getString("PW"));
                 rsDto.setName(rs.getString("NAME"));
-                rsDto.setEmail(rs.getString("EMAIL"));
+                rsDto.setEmailID(rs.getString("EMAIL_ID"));
                 rsDto.setAdmin(rs.getInt("ADMIN"));
             }
         } catch(SQLException e) {

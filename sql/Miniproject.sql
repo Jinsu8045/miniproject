@@ -1,4 +1,6 @@
 -- CONNECTION: url=jdbc:oracle:thin:@//localhost:1521/XE
+
+
 -- New script in localhost.
 -- Connection Type: dev 
 -- Url: jdbc:oracle:thin:@//localhost:1521/XE
@@ -16,7 +18,8 @@ CREATE TABLE MEMBERS(
     ID VARCHAR2(100) NOT NULL,
     PW VARCHAR2(100) NOT NULL,
     NAME VARCHAR2(100),
-    EMAIL VARCHAR2(100),
+    EMAIL_ID VARCHAR2(100),
+    EMAIL_SITE VARCHAR2(100),   -- 추가!
     ADMIN NUMBER
     );
    
@@ -122,6 +125,15 @@ NOCACHE;
 
 
 INSERT INTO MEMBERS values ('M'||MEMBER_NUM_SEQ.NEXTVAL,'admin','admin','관리자','admin@gmail.com',1);
+
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'Genesis GV80', '준중형차','편안', 1,1,1);
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'KIA K7', '준중형차','편안', 1,1,0);
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'Genesis G80', '준중형차','편안', 1,0,1);
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'Genesis G70', '준중형차','편안', 1,0,0);
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'Hyundai 투싼', '준중형차','편안', 0,1,1);
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'KIA 레이', '준중형차','편안', 0,1,0);
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'KIA 셀토스', '준중형차','편안', 0,0,1);
+INSERT INTO CARS VALUES('C'||CAR_NUM_SEQ.NEXTVAL, 'Hyundai 아반떼', '준중형차','편안', 0,0,0);
 
 COMMIT;
 
