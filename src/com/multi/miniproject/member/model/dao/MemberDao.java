@@ -60,13 +60,15 @@ public class MemberDao {
         PreparedStatement ps = null;
 
         try {
-            String sql = "INSERT INTO MEMBERS VALUES(MEMBER_NUM_SEQ.NEXTVAL,?,?,?,?,0 )";
+            String sql = "INSERT INTO MEMBERS VALUES('M'||MEMBER_NUM_SEQ.NEXTVAL,?,?,?,?,?,0)";
             ps = con.prepareStatement(sql);
 
             ps.setString(1,memberDto.getId());
             ps.setString(2,memberDto.getPw());
             ps.setString(3,memberDto.getName());
-            ps.setString(4,memberDto.getEmail());
+            ps.setString(4,memberDto.getEmailID());
+            ps.setString(5,memberDto.getEmailSite());
+
 
             result = ps.executeUpdate();
 
@@ -185,8 +187,11 @@ public class MemberDao {
                 rsDto.setId(rs.getString("ID"));
                 rsDto.setPw(rs.getString("PW"));
                 rsDto.setName(rs.getString("NAME"));
-                rsDto.setEmail(rs.getString("EMAIL"));
+                rsDto.setEmailID(rs.getString("EMAIL_ID")); //5/13수정
+                rsDto.setEmailSite(rs.getString("EMAIL_SITE"));
+                rsDto.setEmail();
                 rsDto.setAdmin(rs.getInt("ADMIN"));
+                System.out.println(rsDto);
             }
 
         } catch (SQLException e) {
@@ -224,7 +229,9 @@ public class MemberDao {
                 rsDto.setId(rs.getString("ID"));
                 rsDto.setPw(rs.getString("PW"));
                 rsDto.setName(rs.getString("NAME"));
-                rsDto.setEmail(rs.getString("EMAIL"));
+                rsDto.setEmailID(rs.getString("EMAIL_ID")); //5/13수정
+                rsDto.setEmailSite(rs.getString("EMAIL_SITE"));
+                rsDto.setEmail();
                 rsDto.setAdmin(rs.getInt("ADMIN"));
             }
 

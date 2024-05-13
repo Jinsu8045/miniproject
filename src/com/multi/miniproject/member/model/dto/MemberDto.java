@@ -16,15 +16,19 @@ public class MemberDto {
     private String name; //null
     private String email;
     private int admin;
+    private String emailID;
+    private String emailSite;
 
 
     public MemberDto(){}
 
-    public MemberDto(String id, String pw, String name, String email) {
+    public MemberDto(String id, String pw, String name, String emailID, String emailSite) {
         this.id = id;
         this.pw = pw;
         this.name = name;
-        this.email = email;
+        this.emailID = emailID;
+        this.emailSite = emailSite;
+        setEmail();
     }
 
     public String getMemberNum() {
@@ -63,8 +67,8 @@ public class MemberDto {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail() {
+        this.email = getEmailID()+getEmailSite();
     }
 
     public int getAdmin() {
@@ -73,6 +77,22 @@ public class MemberDto {
 
     public void setAdmin(int admin) {
         this.admin = admin;
+    }
+
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
+    }
+
+    public String getEmailSite() {
+        return emailSite;
+    }
+
+    public void setEmailSite(String emailSite) {
+        this.emailSite = emailSite;
     }
 
     @Override
@@ -86,4 +106,7 @@ public class MemberDto {
                 ", admin=" + admin +
                 '}';
     }
+
+
+
 }

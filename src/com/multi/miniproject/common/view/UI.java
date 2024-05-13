@@ -94,7 +94,9 @@ public class UI {
         JLabel l5 = new JLabel("이름");
         JTextField t5 = new JTextField(10); // 10은 글자수
         JLabel l6 = new JLabel("이메일");
-        JTextField t6 = new JTextField(30); // 10은 글자수
+        JTextField t6 = new JTextField(15); // 10은 글자수
+        JTextField t7 = new JTextField(15); // 10은 글자수 //'직접입력'일시 잠금해제 하는 기능 구현 필요.
+
         //combobox2: 이메일 도메인
         String[] g2 = {"@naver.com", "@gmail.com", "직접입력"};
         JComboBox combo2 = new JComboBox(g2);
@@ -114,6 +116,7 @@ public class UI {
         f.add(t5);
         f.add(l6);
         f.add(t6);
+        f.add(t7);
         f.add(combo2);
 
         f.add(b2);
@@ -148,19 +151,22 @@ public class UI {
                 String pw = t3.getText();
                 String pw2 = t4.getText();
                 String name = t5.getText();
-                String email;
+                String emailID = t6.getText();
+                String emailSite;
+
 
                 String selectedValue = combo2.getSelectedItem().toString();
                 if(selectedValue.equals("직접입력")){
-                    email = t6.getText();
+                    emailSite = t7.getText();
                 }else{
-                    email = t6.getText() + selectedValue;
+                    emailSite = selectedValue;
                 }
 
                 MemberDao memberDao = new MemberDao();
+                boolean startsWithAt = emailSite.startsWith("@");
 
-                if(pw.equals(pw2) && memberDao.idCheck(id)==false){
-                    MemberDto memberDto = new MemberDto(id, pw, name, email);
+                if(pw.equals(pw2) && memberDao.idCheck(id)==false && startsWithAt==true){
+                    MemberDto memberDto = new MemberDto(id, pw, name, emailID, emailSite);
                     int result = memberDao.joinMember(memberDto);
                     if(result == 1){
                         JOptionPane.showMessageDialog(f, "회원가입 완료. 로그인 해주세요.");
@@ -171,6 +177,8 @@ public class UI {
 
                 }else if (!pw.equals(pw2)){
                     JOptionPane.showMessageDialog(f,"비밀번호 값이 일치하지 않습니다.");
+                }else if (startsWithAt==false){
+                    JOptionPane.showMessageDialog(f,"올바르지 않은 이메일 형식입니다(@필수)");
                 }else{
                     JOptionPane.showMessageDialog(f,"중복된 아이디입니다.");
                 }
@@ -512,6 +520,10 @@ public class UI {
         b1.addActionListener(new ActionListener() { // 수정
             @Override
             public void actionPerformed(ActionEvent e) {
+                MemberDto memberDto = new MemberDto();
+                MemberDao memberDao = new MemberDao();
+//                int result = memberDao.updateUser();
+
                 JOptionPane.showMessageDialog(f, "수정되었습니다.");
                 p04();
             }
