@@ -12,10 +12,12 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class UI {
   JFrame f = new JFrame();
     private String loginUser = null;
+
 
     public void p01(){
 //JFrame 정의
@@ -505,11 +507,25 @@ public class UI {
         JTextField t5 = new JTextField(10); // 10은 글자수
         t5.setText(dao.loginUser(loginUser).getName());
         JLabel l6 = new JLabel("이메일");
-        JTextField t6 = new JTextField(30); // 10은 글자수
-        t6.setText(dao.loginUser(loginUser).getEmail());
+        JTextField t6 = new JTextField(15); // 10은 글자수
+        t6.setText(dao.loginUser(loginUser).getEmailID());
+        JTextField t7 = new JTextField(15);
+
+
         //combobox2: 이메일 도메인
-        String[] g2 = {"@naver.com", "@gmail.com", "직접입력"};
-        JComboBox combo2 = new JComboBox(g2);
+        ArrayList<String> g2 = new ArrayList<>();
+        g2.add("@naver.com");
+        g2.add("@gmail.com");
+        g2.add("직접입력");
+        JComboBox<String> combo2 = new JComboBox<>(g2.toArray(new String[0]));
+
+
+        if(g2.contains(dao.loginUser(loginUser).getEmailSite())){
+            // 작성불가/jbox 일치시키기
+        }else{
+            t7.setText(dao.loginUser(loginUser).getEmailSite());
+        }
+
 
         JButton b1 = new JButton("수정");
 
@@ -524,6 +540,7 @@ public class UI {
         f.add(t5);
         f.add(l6);
         f.add(t6);
+        f.add(t7);
         f.add(combo2);
         f.add(b1);
 
@@ -537,12 +554,34 @@ public class UI {
         b1.addActionListener(new ActionListener() { // 수정
             @Override
             public void actionPerformed(ActionEvent e) {
-                MemberDto memberDto = new MemberDto();
-                MemberDao memberDao = new MemberDao();
-//                int result = memberDao.updateUser();
+                String pw = t3.getText();
+                String pwNew = t4.getText();
+                String name = t5.getText();
+                String emailID = t6.getText();
+                String emailSite;
 
-                JOptionPane.showMessageDialog(f, "수정되었습니다.");
-                p04();
+                String selectedValue = combo2.getSelectedItem().toString();
+                if(selectedValue.equals("직접입력")){
+                    emailSite = t7.getText();
+                }else{
+                    emailSite = selectedValue;
+                }
+                if(dao.loginUser(loginUser).getPw().equals(pw)) {
+
+                    MemberDto memberDto = new MemberDto(l21.getText(), pwNew, name, emailID, emailSite);
+                    MemberDao memberDao = new MemberDao();
+                    int result = memberDao.updateUser(memberDto);
+
+                    if(result==1){
+                        JOptionPane.showMessageDialog(f, "수정되었습니다.");
+                        p04();
+                    }else{
+                        JOptionPane.showMessageDialog(f, "업데이트 실패. 다시 시도해주세요.");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(f, "비밀번호가 올바르지 않습니다");
+                }
+
             }
         }); //b1.addActionListener
         /////////////////////////////////////////
@@ -554,6 +593,18 @@ public class UI {
     public void p04_2(){
         //JFrame 정의
 //        f = new JFrame();
+
+        MemberDao dao = new MemberDao();
+
+        Random r = new Random();
+        StringBuilder rString = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            int digit = r.nextInt(16); // 0부터 15 사이의 난수 생성
+            rString.append(Integer.toHexString(digit)); // 16진수로 변환하여 추가
+        }
+
+
+
         f.getContentPane().removeAll();
         f.repaint();
         f.setSize(400, 600);
@@ -572,11 +623,11 @@ public class UI {
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         JLabel l2 = new JLabel("아이디");
-        JLabel l21 = new JLabel("l21.setText()"); //수정불가하므로
+        JLabel l21 = new JLabel(dao.loginUser(loginUser).getId()); //수정불가하므로
         JLabel l3 = new JLabel("비밀번호");
         JTextField t3 = new JTextField(30); // 10은 글자수
         JLabel l4 = new JLabel("자동 입력방지");
-        JLabel l41 = new JLabel("l41.setText()");
+        JLabel l41 = new JLabel(String.format(rString.toString()));
         JButton b1 = new JButton("새로고침");
         JTextField t4 = new JTextField(10); // 10은 글자수
 
@@ -612,8 +663,14 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //미구현 : 재미삼아 해보셔도...(난수 활용해서요)
-                //l41.setText()
+                Random r = new Random();
+                StringBuilder rString = new StringBuilder();
+                for (int i = 0; i < 6; i++) {
+                    int digit = r.nextInt(16); // 0부터 15 사이의 난수 생성
+                    rString.append(Integer.toHexString(digit)); // 16진수로 변환하여 추가
+                }
+
+                l41.setText(rString.toString());
             }
         }); //b1.addActionListener
 
@@ -621,8 +678,28 @@ public class UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cb1.isSelected()){//checkbox 처리확인후
-                    JOptionPane.showMessageDialog(f, "탈퇴처리되었습니다. 메인화면으로 돌아갑니다.");
-                    p01();
+                    String pw = t3.getText();
+                    String answerR = t4.getText();
+                    String rString = l41.getText();
+
+                    boolean pwMatch = dao.loginUser(loginUser).getPw().equals(pw);
+                    boolean rResult = answerR.equals(rString);
+
+                    if(pwMatch&&rResult) {
+
+                        int result = dao.deleteMember(loginUser);
+                        if(result==1){
+
+                        JOptionPane.showMessageDialog(f, "탈퇴 처리 되었습니다. 메인화면으로 돌아갑니다.");
+                        p01();
+                        }else{
+                            JOptionPane.showMessageDialog(f, "처리 실패. 다시 시도해주세요.");
+                        }
+                    }else if(pwMatch==false){
+                        JOptionPane.showMessageDialog(f, "비밀번호 오류. 다시 입력해주세요");
+                    }else{
+                        JOptionPane.showMessageDialog(f, "자동입력방지 값이 일치하지 않습니다.");
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(f, "주의사항을 다시 확인해주세요.");

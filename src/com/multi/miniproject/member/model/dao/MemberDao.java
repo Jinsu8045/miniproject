@@ -153,7 +153,7 @@ public class MemberDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("error");
+            System.out.println("match error");
 
             try {
                 con.rollback();
@@ -211,7 +211,7 @@ public class MemberDao {
     }
 
 
-    public MemberDto loginUser(String loginUser) {
+    public MemberDto loginUser(String loginUserPK) {
         MemberDto rsDto = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -220,7 +220,7 @@ public class MemberDao {
             String sql = "select * from members where MEMBER_NUM = ?";
             ps = con.prepareStatement(sql);
 
-            ps.setString(1,loginUser);
+            ps.setString(1,loginUserPK);
 
             rs = ps.executeQuery();
             if(rs.next()){
@@ -237,7 +237,7 @@ public class MemberDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("select error");
+            System.out.println("get login user info error");
 
             try {
                 con.rollback();
@@ -252,8 +252,85 @@ public class MemberDao {
     }
 
 
+    public int updateUser(MemberDto memberDto) {
+        int result = 0;
+
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "UPDATE MEMBERS SET PW = ?, NAME = ?, EMAIL_ID = ?, EMAIL_SITE = ? WHERE ID = ?";
+            ps = con.prepareStatement(sql);
+
+            ps.setString(5,memberDto.getId());
+            ps.setString(1,memberDto.getPw());
+            ps.setString(2,memberDto.getName());
+            ps.setString(3,memberDto.getEmailID());
+            ps.setString(4,memberDto.getEmailSite());
+
+
+            result = ps.executeUpdate();
+
+            if(result > 0){
+                con.commit();
+            }else{
+                con.rollback();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("update error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        }finally {
+            dbcp.freeConnection(con, ps);
+        }
+
+
+        return result;
+    }
+
+    public int deleteMember(String loginUser) {
+        int result = 0;
+
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "DELETE FROM MEMBERS WHERE MEMBER_NUM= ?";
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1,loginUser);
+
+            result = ps.executeUpdate();
+
+            if(result > 0){
+                con.commit();
+            }else{
+                con.rollback();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("delete error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        }finally {
+            dbcp.freeConnection(con, ps);
+        }
+
+
+        return result;
 
 
 
-
+    }
 }
