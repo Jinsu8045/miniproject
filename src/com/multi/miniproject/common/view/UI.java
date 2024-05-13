@@ -1,8 +1,10 @@
 package com.multi.miniproject.common.view;
 
 import com.multi.miniproject.member.model.dao.MemberDao;
+import com.multi.miniproject.member.model.dao.PresetDao;
 import com.multi.miniproject.member.model.dao.ProductDao;
 import com.multi.miniproject.member.model.dto.MemberDto;
+import com.multi.miniproject.member.model.dto.PresetDto;
 import com.multi.miniproject.member.model.dto.ProductDto;
 
 import javax.swing.*;
@@ -1077,6 +1079,21 @@ public class UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(f,"필터가 등록되었습니다.");
+
+                PresetDao presetDao = new PresetDao(); // 쪽지 전달자!!
+                PresetDto presetDto = new PresetDto(); // 쪽지
+                //설문결과를 담아내는 작업 (빈쪽지를 채우는=set하는 작업)
+                //presetDto.setPresetNum();         //안해도 된다! 어차피 오라클이 대신해주니까
+                presetDto.setMemberNum(loginUser);
+                presetDto.setPresetComfort(r11.isSelected() ? 1 : 0 );
+                presetDto.setPresetWeight(r21.isSelected() ? 1 : 0);
+                presetDto.setPresetPassenger(r31.isSelected() ? 1 : 0);
+
+                // DAO를 거친 후 result값 리턴받기
+                int result = presetDao.insert(presetDto); //쪽지를 insert (DAO가 insert한다 DTO(쪽지)를 어디에? DB에), result에 성공여부만 알려드림.
+                if(result == 1) JOptionPane.showMessageDialog(f, "필터가 등록되었습니다: "+presetDto);
+                else JOptionPane.showMessageDialog(f, "필터가 등록되지 않았습니다.");
+
                 p06();
             }
         }); //b1.addActionListener
