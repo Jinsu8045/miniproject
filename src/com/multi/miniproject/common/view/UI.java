@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class UI {
-    JFrame f = new JFrame();
+  JFrame f = new JFrame();
     private String loginUser = null;
 
     public void p01(){
@@ -103,7 +103,9 @@ public class UI {
         JLabel l5 = new JLabel("이름");
         JTextField t5 = new JTextField(10); // 10은 글자수
         JLabel l6 = new JLabel("이메일");
-        JTextField t6 = new JTextField(30); // 10은 글자수
+        JTextField t6 = new JTextField(15); // 10은 글자수
+        JTextField t7 = new JTextField(15); // 10은 글자수 //'직접입력'일시 잠금해제 하는 기능 구현 필요.
+
         //combobox2: 이메일 도메인
         String[] g2 = {"@naver.com", "@gmail.com", "직접입력"};
         JComboBox combo2 = new JComboBox(g2);
@@ -123,6 +125,7 @@ public class UI {
         f.add(t5);
         f.add(l6);
         f.add(t6);
+        f.add(t7);
         f.add(combo2);
 
         f.add(b2);
@@ -157,19 +160,22 @@ public class UI {
                 String pw = t3.getText();
                 String pw2 = t4.getText();
                 String name = t5.getText();
-                String email;
+                String emailID = t6.getText();
+                String emailSite;
+
 
                 String selectedValue = combo2.getSelectedItem().toString();
                 if(selectedValue.equals("직접입력")){
-                    email = t6.getText();
+                    emailSite = t7.getText();
                 }else{
-                    email = t6.getText() + selectedValue;
+                    emailSite = selectedValue;
                 }
 
                 MemberDao memberDao = new MemberDao();
+                boolean startsWithAt = emailSite.startsWith("@");
 
-                if(pw.equals(pw2) && memberDao.idCheck(id)==false){
-                    MemberDto memberDto = new MemberDto(id, pw, name, email);
+                if(pw.equals(pw2) && memberDao.idCheck(id)==false && startsWithAt==true){
+                    MemberDto memberDto = new MemberDto(id, pw, name, emailID, emailSite);
                     int result = memberDao.joinMember(memberDto);
                     if(result == 1){
                         JOptionPane.showMessageDialog(f, "회원가입 완료. 로그인 해주세요.");
@@ -180,6 +186,8 @@ public class UI {
 
                 }else if (!pw.equals(pw2)){
                     JOptionPane.showMessageDialog(f,"비밀번호 값이 일치하지 않습니다.");
+                }else if (startsWithAt==false){
+                    JOptionPane.showMessageDialog(f,"올바르지 않은 이메일 형식입니다(@필수)");
                 }else{
                     JOptionPane.showMessageDialog(f,"중복된 아이디입니다.");
                 }
@@ -220,7 +228,7 @@ public class UI {
         JTextField t3 = new JTextField(30); // 10은 글자수
 
         JButton b1 = new JButton("로그인: p03()으로 이동");
-        JButton b2 = new JButton("아이디/비밀번호 찾기");
+        JButton b2 = new JButton("비밀번호 찾기");
         JButton b3 = new JButton("회원가입: p01_1()으로 이동");
 
         f.add(b0);
@@ -239,17 +247,52 @@ public class UI {
             }
         }); //b0.addActionListener
 
-        b1.addActionListener(new ActionListener() {
+        b1.addActionListener(new ActionListener() {     //로그인
             @Override
             public void actionPerformed(ActionEvent e) {
-                p03();
+                String id = t2.getText();
+                String pw = t3.getText();
+
+                MemberDto memberDto = new MemberDto();
+                memberDto.setId(id);
+                memberDto.setPw(pw);
+
+                MemberDao memberDao = new MemberDao();
+                boolean result = memberDao.login(id,pw);
+
+                if(result){
+                    JOptionPane.showMessageDialog(f,"로그인 성공");
+                    loginUser = memberDao.selectOne(id).getMemberNum();
+                    p03();
+                }else if(id.equals("")||pw.equals("")){
+                    JOptionPane.showMessageDialog(f,"입력되지 않은 값이 있습니다");
+                }else if(memberDao.idCheck(id)==false){
+                    JOptionPane.showMessageDialog(f,"존재하지 않는 아이디 입니다.");
+                }else{
+                    JOptionPane.showMessageDialog(f,"아이디와 비밀번호가 일치하지 않습니다.");
+                }
+
+
             }
         }); //b1.addActionListener
 
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //미구현
+                String id = JOptionPane.showInputDialog("아이디를 입력하세요");
+                MemberDao memberDao = new MemberDao();
+                if(memberDao.idCheck(id)){
+                    String name = JOptionPane.showInputDialog("이름을 입력하세요");
+                    boolean result = memberDao.findPw(id, name);
+                    if(result==true){
+                        JOptionPane.showMessageDialog(f,"ID : "+ id + " PW : " + (memberDao.selectOne(id)).getPw());
+                    }else{
+                        JOptionPane.showMessageDialog(f,"일치하는 회원정보가 없습니다.");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(f,"존재하지 않는 아이디 입니다.");
+                }
+
             }
         }); //b2.addActionListener
 
@@ -350,6 +393,9 @@ public class UI {
     } //p03() : 메뉴
 
     public void p04(){
+
+        MemberDao dao = new MemberDao();
+
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -370,8 +416,9 @@ public class UI {
 
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
-        JLabel l2 = new JLabel("이름 l2.setText()");
-        JLabel l3 = new JLabel("아이디(이메일) l3.setText()");
+        JLabel l2 = new JLabel("이름 " + dao.loginUser(loginUser).getName());
+        JLabel l3 = new JLabel("아이디(이메일)" + dao.loginUser(loginUser).getId()+
+                                                    "("+dao.loginUser(loginUser).getEmail()+")");
         //이미지
         JLabel img1 = new JLabel("이미지");
 //        img1.setIcon(new ImageIcon("images/img.jpg"));
@@ -415,6 +462,7 @@ public class UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
+                loginUser = null;
                 p01();
             }
         }); //b3.addActionListener
@@ -424,6 +472,9 @@ public class UI {
         f.setVisible(true);
     } //p04() : 마이페이지
     public void p04_1(){
+
+        MemberDao dao = new MemberDao();
+
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -445,17 +496,17 @@ public class UI {
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         JLabel l2 = new JLabel("아이디");
-        JLabel l21 = new JLabel("l21.setText()"); //수정불가하므로
+        JLabel l21 = new JLabel(dao.loginUser(loginUser).getId()); //수정불가하므로
         JLabel l3 = new JLabel("현재 비밀번호");
         JTextField t3 = new JTextField(30); // 10은 글자수
         JLabel l4 = new JLabel("변경 비밀번호");
         JTextField t4 = new JTextField(30); // 10은 글자수
         JLabel l5 = new JLabel("이름");
         JTextField t5 = new JTextField(10); // 10은 글자수
-        t5.setText("불러와주셔야 돼요 이거");
+        t5.setText(dao.loginUser(loginUser).getName());
         JLabel l6 = new JLabel("이메일");
         JTextField t6 = new JTextField(30); // 10은 글자수
-        t6.setText("불러와주셔야 돼요 이거");
+        t6.setText(dao.loginUser(loginUser).getEmail());
         //combobox2: 이메일 도메인
         String[] g2 = {"@naver.com", "@gmail.com", "직접입력"};
         JComboBox combo2 = new JComboBox(g2);
@@ -483,9 +534,13 @@ public class UI {
             }
         }); //b0.addActionListener
 
-        b1.addActionListener(new ActionListener() {
+        b1.addActionListener(new ActionListener() { // 수정
             @Override
             public void actionPerformed(ActionEvent e) {
+                MemberDto memberDto = new MemberDto();
+                MemberDao memberDao = new MemberDao();
+//                int result = memberDao.updateUser();
+
                 JOptionPane.showMessageDialog(f, "수정되었습니다.");
                 p04();
             }
