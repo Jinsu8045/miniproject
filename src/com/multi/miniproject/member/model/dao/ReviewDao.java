@@ -54,8 +54,31 @@ public class ReviewDao {
         return rsDto;
     } //getOrderDto() : ReviewDto를 파라미터로 넣으면 이것에 대응되는 OrderDto를 리턴해주는 함수
 
-    public ArrayList<OrderDto> selectList(int criteria, String keyword) {
-        ArrayList<OrderDto> rsDtoList = new ArrayList<>();
+    public int delete(String reviewNum) {
+        int result = 0;
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "DELETE FROM REVIEWS WHERE REVIEW_NUM = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, reviewNum);
+
+            result = ps.executeUpdate();
+            if(result > 0) con.commit();
+            else con.rollback();
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+            System.out.println("delete(Review)시 에러발생");
+
+        } finally {
+            dbcp.freeConnection(con, ps);
+        }
+        return result;
+    } // delete(Review)
+
+    public ArrayList<ReviewDto> selectList(int criteria, String keyword) {
+        ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -83,19 +106,18 @@ public class ReviewDao {
             rs = ps.executeQuery();
 
             while(rs.next()) {
-                OrderDto orderDto = new OrderDto();
-                orderDto.setOrderNum(rs.getString("ORDER_NUM"));
-                orderDto.setMemberNum(rs.getString("MEMBER_NUM"));
-                orderDto.setProductNum(rs.getString("PRODUCT_NUM"));
-                orderDto.setOrderStatus(rs.getInt("ORDER_STATUS"));
-                orderDto.setOrderRefundRequest(rs.getInt("ORDER_REFUND_REQUEST"));
-                orderDto.setOrderRefundComplete(rs.getInt("ORDER_REFUND_COMPLETE"));
-                System.out.println(orderDto);
+                ReviewDto reviewDto = new ReviewDto();
+                reviewDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                reviewDto.setOrderNum(rs.getString("ORDER_NUM"));
+                reviewDto.setRating(rs.getInt("RATING"));
+                reviewDto.setTitle(rs.getString("TITLE"));
+                reviewDto.setContents(rs.getString("CONTENTS"));
+                System.out.println(reviewDto);
 
-                rsDtoList.add(orderDto);
+                rsDtoList.add(reviewDto);
             }
         } catch(SQLException e) {
-            System.out.println("selectList(Order)시 에러발생");
+            System.out.println("selectList(Review)시 에러발생");
         } finally {
             dbcp.freeConnection(con, ps, rs);
         }
