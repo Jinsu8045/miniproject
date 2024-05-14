@@ -938,7 +938,7 @@ public class UI {
         JButton b1 = new JButton("필터 적용: p07()로 이동");
         // 검색버튼 구현
         //combobox
-        String[] g1 = {"차종", "차종분류", "취향"};
+        String[] g1 = {"차종", "차량가격", "주문가능여부"};
         JComboBox combo1 = new JComboBox(g1);
         JTextField t1 = new JTextField(20); // 10은 글자수
         JButton b11 = new JButton("검색");
@@ -976,7 +976,12 @@ public class UI {
         b11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //미구현
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                ProductDao productDao = new ProductDao();
+                ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
+
             }
         }); //b11.addActionListener
 
