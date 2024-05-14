@@ -154,4 +154,79 @@ public class ReviewDao {
     } //selectList(Review)
 
 
+    public ArrayList<ReviewDto> selectList(String criteria, String keyword) {
+        ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "";
+            switch(criteria){ //검색조건
+                case "아이디":
+                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND WRITER = ?";
+                    break;
+                case "제목":
+                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND TITLE = ?";
+                    break;
+                case "차종":
+                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND CAR_NUM = ?";
+                    break;
+            }//REVIEWS가 아니고 VIEW 불러오기.
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, keyword); //검색어
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ReviewDto reviewDto = new ReviewDto();
+                reviewDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                reviewDto.setTitle(rs.getString("TITLE"));
+                reviewDto.setCar_num(rs.getString("CAR_NUM"));
+                reviewDto.setWriter(rs.getString("WRITER"));
+                System.out.println(reviewDto);
+
+                rsDtoList.add(reviewDto);
+            }
+
+        } catch(SQLException e) {
+            System.out.println("selectList(Review)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+        return rsDtoList;
+    } //selectList(Review) //user 사용용 수정해야함.
+
+
+    public ArrayList<ReviewDto> latestlist () {
+        ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ReviewDto reviewDto = new ReviewDto();
+                reviewDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                reviewDto.setTitle(rs.getString("TITLE"));
+                reviewDto.setCar_num(rs.getString("CAR_NUM"));
+                reviewDto.setWriter(rs.getString("WRITER"));
+//                reviewDto.setOrderNum(rs.getString("ORDER_NUM"));
+//                reviewDto.setRating(rs.getInt("RATING"));
+//                reviewDto.setContents(rs.getString("CONTENTS"));
+                System.out.println(reviewDto);
+
+                rsDtoList.add(reviewDto);
+            }
+
+        } catch(SQLException e) {
+            System.out.println("selectList(Review)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+        return rsDtoList;
+    } //selectList(Review) //user 사용용 수정해야함.
+
 }

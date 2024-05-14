@@ -190,7 +190,7 @@ public class MemberDao {
                 rsDto.setName(rs.getString("NAME"));
                 rsDto.setEmailID(rs.getString("EMAIL_ID")); //5/13수정
                 rsDto.setEmailSite(rs.getString("EMAIL_SITE"));
-                rsDto.setEmail();
+                rsDto.setEmail();// 제거예정
                 rsDto.setAdmin(rs.getInt("ADMIN"));
                 System.out.println(rsDto);
             }
@@ -232,7 +232,7 @@ public class MemberDao {
                 rsDto.setName(rs.getString("NAME"));
                 rsDto.setEmailID(rs.getString("EMAIL_ID")); //5/13수정
                 rsDto.setEmailSite(rs.getString("EMAIL_SITE"));
-                rsDto.setEmail();
+                rsDto.setEmail();//제거예정
                 rsDto.setAdmin(rs.getInt("ADMIN"));
             }
 
@@ -394,4 +394,10 @@ public class MemberDao {
 
         return rsDtoList;
     } //selectList(Member) dev by HGKANG
+
+    public ArrayList<MemberDto> list() {
+        ArrayList<MemberDto> li = new ArrayList<>();
+
+        return li;
+    }
 }

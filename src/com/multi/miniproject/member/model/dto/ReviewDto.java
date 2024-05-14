@@ -17,6 +17,9 @@ public class ReviewDto {
     private int rating;
     private String title;
     private String contents;
+    private String writer;
+    private String car_num;
+
 
     public ReviewDto() {
     }
@@ -68,6 +71,23 @@ public class ReviewDto {
     public void setContents(String contents) {
         this.contents = contents;
     }
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+
+    public String getCar_num() {
+        return car_num;
+    }
+
+    public void setCar_num(String car_num) {
+        this.car_num = car_num;
+    }
+
 
     @Override
     public String toString() {
