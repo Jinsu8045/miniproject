@@ -201,24 +201,26 @@ public class ReviewDao {
         ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
+        ReviewDto rsDto = null;
 
         try {
             String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            while(rs.next()) {
-                ReviewDto reviewDto = new ReviewDto();
-                reviewDto.setReviewNum(rs.getString("REVIEW_NUM"));
-                reviewDto.setTitle(rs.getString("TITLE"));
-                reviewDto.setCar_num(rs.getString("CAR_NUM"));
-                reviewDto.setWriter(rs.getString("WRITER"));
-//                reviewDto.setOrderNum(rs.getString("ORDER_NUM"));
-//                reviewDto.setRating(rs.getInt("RATING"));
-//                reviewDto.setContents(rs.getString("CONTENTS"));
-                System.out.println(reviewDto);
 
-                rsDtoList.add(reviewDto);
+            while(rs.next()) {
+                rsDto = new ReviewDto();
+                rsDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                rsDto.setTitle(rs.getString("TITLE"));
+                rsDto.setCar_num(rs.getString("CAR_NUM"));
+                rsDto.setWriter(rs.getString("WRITER"));
+//                rsDto.setOrderNum(rs.getString("ORDER_NUM"));
+//                rsDto.setRating(rs.getInt("RATING"));
+//                rsDto.setContents(rs.getString("CONTENTS"));
+//                System.out.println(rsDto); //확인용
+
+                rsDtoList.add(rsDto);
             }
 
         } catch(SQLException e) {
@@ -229,4 +231,36 @@ public class ReviewDao {
         return rsDtoList;
     } //selectList(Review) //user 사용용 수정해야함.
 
+    public ReviewDto reviewDetail(String selectRowNo) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ReviewDto rsDto = null;
+
+        try {
+            String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, selectRowNo);
+            rs = ps.executeQuery();
+
+            if(rs.next()){
+                rsDto = new ReviewDto();
+                rsDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                rsDto.setTitle(rs.getString("TITLE"));
+                rsDto.setCar_num(rs.getString("CAR_NUM"));
+                rsDto.setWriter(rs.getString("WRITER"));
+                rsDto.setOrderNum(rs.getString("ORDER_NUM"));
+                rsDto.setRating(rs.getInt("RATING"));
+                rsDto.setContents(rs.getString("CONTENTS"));
+            }
+        } catch(SQLException e) {
+            System.out.println("selectOne(reviewNum)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDto;
+
+
+
+    }
 }

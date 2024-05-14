@@ -1,6 +1,8 @@
 package com.multi.miniproject.common.view;
 
+import com.multi.miniproject.member.model.dao.MemberDao;
 import com.multi.miniproject.member.model.dao.ReviewDao;
+import com.multi.miniproject.member.model.dto.MemberDto;
 import com.multi.miniproject.member.model.dto.ReviewDto;
 
 import javax.swing.*;
@@ -13,8 +15,7 @@ import java.util.ArrayList;
 
 public class ReviewPage extends UI{
 
-    String selectRowNo = null;
-//    JFrame f = new JFrame();
+    String selectRowNo = "null";
     JPanel p = new JPanel();
 
 
@@ -117,8 +118,13 @@ public class ReviewPage extends UI{
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p05_2();
-                System.out.println(selectRowNo);
+                if(selectRowNo.equals("null")){
+                    JOptionPane.showMessageDialog(f,"선택된 값이 없습니다.");
+                }else{
+                    p05_2();
+                    System.out.println(selectRowNo);
+                }
+
             }
         }); //b1.addActionListener
         b11.addActionListener(new ActionListener() {
@@ -222,22 +228,28 @@ public class ReviewPage extends UI{
         l1.setFont(font);
         f.add(l1);
         /////////////////////////////////////////////////////////
+        ReviewDao dao = new ReviewDao();
+
         JButton b0 = new JButton("<-뒤로가기");
         JLabel l2 = new JLabel("제목");
         JTextField t2 = new JTextField(30); // 10은 글자수
-        //combobox1: 내가 작성할 리뷰 선택
-        String[] g1 = {"주문이력이 없음", "기타"};
-        JComboBox combo1 = new JComboBox(g1);
+        t2.setText(dao.reviewDetail(selectRowNo).getTitle());
+//        String[] g1 = {"주문이력이 없음", "기타"};
+//        JComboBox combo1 = new JComboBox(g1);
+        JTextField t4 = new JTextField(5); // 10은 글자수
+        t4.setText(dao.reviewDetail(selectRowNo).getCar_num()); //수정 못하게 막기
         String[] g2 = {"5", "4", "3", "2", "1"};
         JComboBox combo2 = new JComboBox(g2);
-        JTextField t3 = new JTextField(50); // 10은 글자수
+        combo2.setSelectedItem(String.valueOf(dao.reviewDetail(selectRowNo).getRating()));
+        JTextField t3 = new JTextField(50);// 10은 글자수
+        t3.setText(dao.reviewDetail(selectRowNo).getContents());
         JButton b1 = new JButton("수정");
         JButton b2 = new JButton("삭제");
 
         f.add(b0);
         f.add(l2);
         f.add(t2);
-        f.add(combo1);
+        f.add(t4);
         f.add(combo2);
         f.add(t3);
         f.add(b1);
@@ -254,9 +266,15 @@ public class ReviewPage extends UI{
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (true) {
+                MemberDao mDao = new MemberDao();
+
+                if (dao.reviewDetail(selectRowNo).getWriter().equals(mDao.loginUser(loginUser).getId())) {
+                    //update만들기
+
                     JOptionPane.showMessageDialog(f, "수정되었습니다.");
                     p05();
+                }else{
+                    JOptionPane.showMessageDialog(f, "수정 권한이 없습니다.");
                 }
             }
         }); //b1.addActionListener
@@ -264,9 +282,14 @@ public class ReviewPage extends UI{
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (true) {
+                MemberDao mDao = new MemberDao();
+                if (dao.reviewDetail(selectRowNo).getWriter().equals(mDao.loginUser(loginUser).getId())) {
+                    //delete 만들기
+
                     JOptionPane.showMessageDialog(f, "삭제되었습니다.");
                     p05();
+                }else{
+                    JOptionPane.showMessageDialog(f, "삭제 권한이 없습니다.");
                 }
             }
         }); //b2.addActionListener
