@@ -106,6 +106,40 @@ public class ProductDao {
         return result;
     } //delete()
 
+    public int update(ProductDto productDto) {
+        int result = 0;
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "UPDATE PRODUCTS SET CAR_NUM = ?, PRODUCT_STATUS = ?, PRODUCT_PRICE = ?, PRODUCT_AVAILABLE = ?  WHERE PRODUCT_NUM  = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, productDto.getCarNum());
+            ps.setString(2, productDto.getProductStatus());
+            ps.setInt(3, productDto.getProductPrice());
+            ps.setInt(4, productDto.getProductAvailable());
+            ps.setString(5, productDto.getProductNum());
+
+
+            result = ps.executeUpdate();
+            if(result > 0) con.commit();
+            else {
+                con.rollback();
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+            System.out.println("update(Product)시 에러발생");
+
+            try{
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+        } finally {
+            dbcp.freeConnection(con, ps);
+        }
+        return result;
+    }
+
     public ProductDto selectOne(String productNum) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -180,6 +214,6 @@ public class ProductDao {
         }
 
         return rsDtoList;
-    } //selectList()
+    } //selectList(Product)
 
 }
