@@ -2,6 +2,7 @@ package com.multi.miniproject.member.model.dao;
 
 import com.multi.miniproject.common.DBConnectionMgr;
 import com.multi.miniproject.member.model.dto.MemberDto;
+import com.multi.miniproject.member.model.dto.ProductDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -333,4 +334,64 @@ public class MemberDao {
 
 
     }
+
+    public ArrayList<MemberDto> selectList(int criteria, String keyword) {
+        ArrayList<MemberDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "";
+            switch(criteria){ //검색조건
+                case 0:
+                    sql += "SELECT * FROM MEMBERS WHERE MEMBER_NUM = ?";
+                    break;
+                case 1:
+                    sql += "SELECT * FROM MEMBERS WHERE ID = ?";
+                    break;
+                case 2:
+                    sql += "SELECT * FROM MEMBERS WHERE NAME = ?";
+                    break;
+                case 3:
+                    sql += "SELECT * FROM MEMBERS WHERE EMAIL_ID = ? AND EMAIL_SITE = ?";
+                    break;
+                case 4:
+                    sql += "SELECT * FROM MEMBERS WHERE ADMIN = ?";
+                    break;
+
+            }
+            ps = con.prepareStatement(sql);
+
+            if(criteria != 3) ps.setString(1, keyword); //검색어
+            else { // 이메일 입력+검색시 (abc@def.com) split 필요
+                String[] splitted = keyword.split("@");
+                if(splitted.length == 2) {
+                    ps.setString(1, splitted[0]); //검색어
+                    ps.setString(2, splitted[1]); //검색어
+                }
+                else ps.setString(1, keyword);
+            }
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                MemberDto memberDto = new MemberDto();
+                memberDto.setMemberNum(rs.getString("MEMBER_NUM"));
+                memberDto.setId(rs.getString("ID"));
+                memberDto.setPw(rs.getString("PW"));
+                memberDto.setName(rs.getString("NAME"));
+                memberDto.setEmailID(rs.getString("EMAIL_ID"));
+                memberDto.setEmailSite(rs.getString("EMAIL_SITE"));
+                memberDto.setAdmin(rs.getInt("ADMIN"));
+
+                memberDto.setEmail(); //KHG CHECK
+                rsDtoList.add(memberDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectList(Member)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectList(Member) dev by HGKANG
 }

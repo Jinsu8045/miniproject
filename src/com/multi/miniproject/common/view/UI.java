@@ -1,11 +1,7 @@
 package com.multi.miniproject.common.view;
 
-import com.multi.miniproject.member.model.dao.MemberDao;
-import com.multi.miniproject.member.model.dao.PresetDao;
-import com.multi.miniproject.member.model.dao.ProductDao;
-import com.multi.miniproject.member.model.dto.MemberDto;
-import com.multi.miniproject.member.model.dto.PresetDto;
-import com.multi.miniproject.member.model.dto.ProductDto;
+import com.multi.miniproject.member.model.dao.*;
+import com.multi.miniproject.member.model.dto.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -1886,19 +1882,19 @@ public class UI {
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         //필터 및 검색
-        JButton b1 = new JButton("필터 적용");
+        JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
-        String[] g1 = {"아이디", "성명", "이메일"};
+        String[] g1 = {"회원번호", "아이디", "이름", "이메일", "관리자여부"};
         JComboBox combo1 = new JComboBox(g1);
         JTextField t1 = new JTextField(20); // 10은 글자수
-        JButton b11 = new JButton("검색");
+        JButton b11 = new JButton("[검색]");
         //
 
-        JButton b2 = new JButton("선택 해제: p06_1()로 이동");
-        JButton b3 = new JButton("탈퇴: p06_2()로 이동");
+        JButton b2 = new JButton("선택 해제: 미구현");
+        JButton b3 = new JButton("[탈퇴]");
 
-        JButton b4 = new JButton("회원X 상세: p07_2()로 이동");
+        JButton b4 = new JButton("회원M3(admin) [상세]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -1907,6 +1903,16 @@ public class UI {
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
+        b1.setBackground(Color.RED);
+        b1.setOpaque(true);
+        b2.setBackground(Color.RED);
+        b2.setOpaque(true);
+        b11.setBackground(Color.YELLOW);
+        b11.setOpaque(true);
+        b3.setBackground(Color.YELLOW);
+        b3.setOpaque(true);
+        b4.setBackground(Color.YELLOW);
+        b4.setOpaque(true);
         b91.setBackground(Color.GREEN);
         b91.setOpaque(true);
         b92.setBackground(Color.GREEN);
@@ -1940,6 +1946,7 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //미구현
 
             }
         }); //b1.addActionListener
@@ -1947,7 +1954,12 @@ public class UI {
         b11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //미구현
+                //리스트 출력
+                String keyword = t1.getText();
+                int criteria = combo1.getSelectedIndex();
+                MemberDao memberDao = new MemberDao();
+                ArrayList<MemberDto> list = memberDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
             }
         }); //b11.addActionListener
 
@@ -1961,14 +1973,29 @@ public class UI {
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_2();
+                //회원 탈퇴(D) 구현
+                String memberNum = JOptionPane.showInputDialog("[1] 탈퇴처리할 회원번호를 입력해주세요. 예)M1");
+
+                // DAO, DTO 선언 및 셋 (삭제는 DTO 필요 X)
+                MemberDao memberDao = new MemberDao();
+
+                // DAO를 거친 후 result값 리턴받기
+                int result = memberDao.deleteMember(memberNum);
+                if (result == 1) JOptionPane.showMessageDialog(f, "해당 회원이 탈퇴처리되었습니다.");
+                else JOptionPane.showMessageDialog(f, "[ERROR] 해당 회원이 탈퇴처리되지 못했습니다.");
             }
         }); //b3.addActionListener
 
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p07_2();
+                //회원 상세(R) 구현
+                String tmp = "admin";
+                MemberDao memberDao = new MemberDao();
+                MemberDto rsDto = memberDao.selectOne(tmp);
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
+                else JOptionPane.showMessageDialog(f, rsDto);
             }
         }); //b3.addActionListener
 
@@ -2028,7 +2055,7 @@ public class UI {
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         //필터 및 검색
-        JButton b1 = new JButton("필터 적용");
+        JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
         String[] g1 = {"차량고유번호", "차종번호", "차량상태", "상품가격", "주문가능여부"};
@@ -2041,7 +2068,7 @@ public class UI {
         JButton b3 = new JButton("[등록]");
         JButton b32 = new JButton("[삭제]");
 
-        JButton b4 = new JButton("차량고유번호가 P1인 상품의 상세");
+        JButton b4 = new JButton("상품 P4의 상세 [수정]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -2050,6 +2077,18 @@ public class UI {
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
+        b1.setBackground(Color.RED);
+        b1.setOpaque(true);
+        b2.setBackground(Color.RED);
+        b2.setOpaque(true);
+        b11.setBackground(Color.YELLOW);
+        b11.setOpaque(true);
+        b3.setBackground(Color.YELLOW);
+        b3.setOpaque(true);
+        b32.setBackground(Color.YELLOW);
+        b32.setOpaque(true);
+        b4.setBackground(Color.YELLOW);
+        b4.setOpaque(true);
         b91.setBackground(Color.GREEN);
         b91.setOpaque(true);
         b92.setBackground(Color.GREEN);
@@ -2096,7 +2135,7 @@ public class UI {
                 int criteria = combo1.getSelectedIndex();
                 ProductDao productDao = new ProductDao();
                 ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
-                JOptionPane.showMessageDialog(f, "[요청하신 검색어에 대한 검색 결과입니다.]" + list);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
 
             }
         }); //b11.addActionListener
@@ -2104,7 +2143,7 @@ public class UI {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_1();
+                //미구현
             }
         }); //b2.addActionListener
 
@@ -2150,13 +2189,19 @@ public class UI {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 상품 상세(R) //행 파라미터 함수로 다시 구현해야함
-                String tmp = "P1";
+                // 상품 상세 수정(U) //행 파라미터 함수로 다시 구현해야함
+                String tmp = "P4";
                 ProductDao productDao = new ProductDao();
                 ProductDto rsDto = productDao.selectOne(tmp);
-                if (rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 해당 상품(" + tmp + ")의 상세정보 조회에 실패했습니다.");
-                else JOptionPane.showMessageDialog(f, rsDto);
-
+                //수정을 위해 다이얼로그를 띄움
+                rsDto.setCarNum(JOptionPane.showInputDialog(null, "carNum: ", rsDto.getCarNum()));
+                rsDto.setProductStatus(JOptionPane.showInputDialog(null, "productStatus: ", rsDto.getProductStatus()));
+                rsDto.setProductPrice(Integer.parseInt(JOptionPane.showInputDialog(null, "productPrice: ", rsDto.getProductPrice())));
+                rsDto.setProductAvailable(Integer.parseInt(JOptionPane.showInputDialog(null, "productAvailable: ", rsDto.getProductAvailable())));
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                int result = productDao.update(rsDto);
+                if(result == 1) JOptionPane.showMessageDialog(f, "해당 상품에 대한 정보가 성공적으로 수정되었습니다."+rsDto);
+                else JOptionPane.showMessageDialog(f, "[ERROR] 해당 상품에 대한 정보 수정에 실패하였습니다.");
             }
         }); //b4.addActionListener
 
@@ -2215,19 +2260,19 @@ public class UI {
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         //필터 및 검색
-        JButton b1 = new JButton("필터 적용");
+        JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
         String[] g1 = {"주문번호", "회원번호", "차량고유번호", "주문상태", "환불요청여부", "환불처리여부"};
         JComboBox combo1 = new JComboBox(g1);
         JTextField t1 = new JTextField(20); // 10은 글자수
-        JButton b11 = new JButton("검색");
+        JButton b11 = new JButton("[검색]");
         //
 
         JButton b2 = new JButton("선택해제: 미구현");
-        JButton b3 = new JButton("환불처리");
+        JButton b3 = new JButton("[환불처리]");
 
-        JButton b4 = new JButton("주문X 상세: p07_2()로 이동");
+        JButton b4 = new JButton("주문O7 [상세]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -2236,6 +2281,16 @@ public class UI {
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
+        b1.setBackground(Color.RED);
+        b1.setOpaque(true);
+        b2.setBackground(Color.RED);
+        b2.setOpaque(true);
+        b11.setBackground(Color.YELLOW);
+        b11.setOpaque(true);
+        b3.setBackground(Color.YELLOW);
+        b3.setOpaque(true);
+        b4.setBackground(Color.YELLOW);
+        b4.setOpaque(true);
         b91.setBackground(Color.GREEN);
         b91.setOpaque(true);
         b92.setBackground(Color.GREEN);
@@ -2276,28 +2331,47 @@ public class UI {
         b11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //미구현
+                //리스트 출력
+                String keyword = t1.getText();
+                int criteria = combo1.getSelectedIndex();
+                OrderDao orderDao = new OrderDao();
+                ArrayList<OrderDto> list = orderDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
             }
         }); //b11.addActionListener
 
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_1();
+                //미구현
             }
         }); //b2.addActionListener
 
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_2();
+                // 주문 환불처리 (UorD)
+                String orderNum = JOptionPane.showInputDialog("[1] 환불요청을 수락하여 삭제할 주문번호를 입력해주세요. 예)O1");
+                // DAO, DTO 선언 및 셋 (삭제는 DTO 필요 X)
+                OrderDao orderDao = new OrderDao();
+
+                // DAO를 거친 후 result값 리턴받기
+                int result = orderDao.delete(orderNum);
+                if(result == 1) JOptionPane.showMessageDialog(f, "해당 주문이 환불처리 되어 목록에서 삭제되었습니다.");
+                else JOptionPane.showMessageDialog(f, "[ERROR] 해당 주문이 목록에서 삭제되지 않았습니다.");
             }
         }); //b3.addActionListener
 
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p07_2();
+                //주문 상세(R) 구현
+                String tmp = "O7";
+                OrderDao orderDao = new OrderDao();
+                OrderDto rsDto = orderDao.selectOne(tmp);
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
+                else JOptionPane.showMessageDialog(f, rsDto);
             }
         }); //b3.addActionListener
 
@@ -2357,19 +2431,19 @@ public class UI {
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         //필터 및 검색
-        JButton b1 = new JButton("필터 적용");
+        JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
-        String[] g1 = {"리뷰번호", "주문번호", "차종평가별점", "후기제목"};
+        String[] g1 = {"리뷰번호", "주문번호", "차종평가별점", "후기제목", "후기내용"};
         JComboBox combo1 = new JComboBox(g1);
         JTextField t1 = new JTextField(20); // 10은 글자수
-        JButton b11 = new JButton("검색");
+        JButton b11 = new JButton("[검색]");
         //
 
-        JButton b2 = new JButton("선택해제: p06_1()로 이동");
-        JButton b3 = new JButton("삭제: p06_2()로 이동");
+        JButton b2 = new JButton("선택해제: 미구현");
+        JButton b3 = new JButton("[삭제]");
 
-        JButton b4 = new JButton("리뷰X 상세: p07_2()로 이동");
+        JButton b4 = new JButton("리뷰R5 [상세]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -2378,6 +2452,16 @@ public class UI {
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
+        b1.setBackground(Color.RED);
+        b1.setOpaque(true);
+        b2.setBackground(Color.RED);
+        b2.setOpaque(true);
+        b11.setBackground(Color.YELLOW);
+        b11.setOpaque(true);
+        b3.setBackground(Color.YELLOW);
+        b3.setOpaque(true);
+        b4.setBackground(Color.YELLOW);
+        b4.setOpaque(true);
         b91.setBackground(Color.GREEN);
         b91.setOpaque(true);
         b92.setBackground(Color.GREEN);
@@ -2418,28 +2502,48 @@ public class UI {
         b11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //미구현
+                //리스트 출력
+                String keyword = t1.getText();
+                int criteria = combo1.getSelectedIndex();
+                ReviewDao reviewDao = new ReviewDao();
+                ArrayList<ReviewDto> list = reviewDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
             }
         }); //b11.addActionListener
 
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_1();
+                //미구현
             }
         }); //b2.addActionListener
 
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_2();
+                // 리뷰 삭제 구현(D)
+                String reviewNum = JOptionPane.showInputDialog("[1] 삭제할 리뷰번호를 입력해주세요. 예)R1");
+                // DAO, DTO 선언 및 셋 (삭제는 DTO 필요 X)
+                ReviewDao reviewDao = new ReviewDao();
+
+                // DAO를 거친 후 result값 리턴받기
+                int result = reviewDao.delete(reviewNum);
+                if(result == 1) JOptionPane.showMessageDialog(f, "해당 리뷰가 목록에서 삭제되었습니다.");
+                else JOptionPane.showMessageDialog(f, "[ERROR] 해당 리뷰가 목록에서 삭제되지 않았습니다.");
+
             }
         }); //b3.addActionListener
 
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p07_2();
+                //리뷰 상세(R) 구현
+                String tmp = "R5";
+                ReviewDao reviewDao = new ReviewDao();
+                ReviewDto rsDto = reviewDao.selectOne(tmp);
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
+                else JOptionPane.showMessageDialog(f, rsDto);
             }
         }); //b3.addActionListener
 
