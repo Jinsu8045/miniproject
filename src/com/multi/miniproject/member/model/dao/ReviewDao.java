@@ -77,6 +77,35 @@ public class ReviewDao {
         return result;
     } // delete(Review)
 
+    public ReviewDto selectOne(String reviewNum) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ReviewDto rsDto = null;
+
+        try {
+            String sql = "SELECT * FROM REVIEWS WHERE REVIEW_NUM = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, reviewNum);
+            rs = ps.executeQuery();
+
+            if(rs.next()){
+                rsDto = new ReviewDto();
+                rsDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                rsDto.setOrderNum(rs.getString("ORDER_NUM"));
+                rsDto.setRating(rs.getInt("RATING"));
+                rsDto.setTitle(rs.getString("TITLE"));
+                rsDto.setContents(rs.getString("CONTENTS"));
+            }
+        } catch(SQLException e) {
+            System.out.println("selectOne(reviewNum)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDto;
+
+    } //selectOne(Review)
+
     public ArrayList<ReviewDto> selectList(int criteria, String keyword) {
         ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
         PreparedStatement ps = null;

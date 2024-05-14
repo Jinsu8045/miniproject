@@ -1,10 +1,7 @@
 package com.multi.miniproject.member.model.dao;
 
 import com.multi.miniproject.common.DBConnectionMgr;
-import com.multi.miniproject.member.model.dto.CarDto;
-import com.multi.miniproject.member.model.dto.MemberDto;
-import com.multi.miniproject.member.model.dto.OrderDto;
-import com.multi.miniproject.member.model.dto.ProductDto;
+import com.multi.miniproject.member.model.dto.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -104,6 +101,36 @@ public class OrderDao {
         }
         return result;
     } // delete(Order)
+
+    public OrderDto selectOne(String orderNum) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        OrderDto rsDto = null;
+
+        try {
+            String sql = "SELECT * FROM ORDERS WHERE ORDER_NUM = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, orderNum);
+            rs = ps.executeQuery();
+
+            if(rs.next()){
+                rsDto = new OrderDto();
+                rsDto.setOrderNum(rs.getString("ORDER_NUM"));
+                rsDto.setMemberNum(rs.getString("MEMBER_NUM"));
+                rsDto.setProductNum(rs.getString("PRODUCT_NUM"));
+                rsDto.setOrderStatus(rs.getInt("ORDER_STATUS"));
+                rsDto.setOrderRefundRequest(rs.getInt("ORDER_REFUND_REQUEST"));
+                rsDto.setOrderRefundRequest(rs.getInt("ORDER_REFUND_COMPLETE"));
+            }
+        } catch(SQLException e) {
+            System.out.println("selectOne(orderNum)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDto;
+
+    } //selectOne(Review)
 
 
     public ArrayList<OrderDto> selectList(int criteria, String keyword) {
