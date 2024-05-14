@@ -11,16 +11,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class ReviewPage {
+public class ReviewPage extends UI{
 
     String selectRowNo = null;
-    JFrame f = new JFrame();
+//    JFrame f = new JFrame();
     JPanel p = new JPanel();
+
+
 
     public void p05() {
         //JFrame 정의
 //        f = new JFrame();
-        ReviewDao dao = new ReviewDao();
 
 
         f.getContentPane().removeAll();
@@ -28,6 +29,7 @@ public class ReviewPage {
         f.setSize(400, 600);
         f.setTitle("첫화면");
         f.getContentPane().setBackground(Color.YELLOW);
+
 
 
         // FlowLayout ?
@@ -56,6 +58,7 @@ public class ReviewPage {
 
         /////////////////////////////////////////////////////////
         p.removeAll();
+        ReviewDao dao = new ReviewDao();
         ArrayList<ReviewDto> list = dao.latestlist(); // ArrayList<MemberDTO>
 
         String[] header = {"no", "Title", "car", "writer"};
@@ -107,6 +110,7 @@ public class ReviewPage {
             public void actionPerformed(ActionEvent e) {
                 UI ui = new UI();
                 ui.p03();
+                f.setVisible(false);
             }
         }); //b0.addActionListener
 

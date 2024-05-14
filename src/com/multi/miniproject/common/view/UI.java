@@ -376,6 +376,7 @@ public class UI {
             public void actionPerformed(ActionEvent e) {
                 ReviewPage reviewPage = new ReviewPage();
                 reviewPage.p05();
+                f.setVisible(false);
 //                    p05();
             }
         }); //b3.addActionListener
