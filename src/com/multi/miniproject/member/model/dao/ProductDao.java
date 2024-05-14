@@ -216,4 +216,44 @@ public class ProductDao {
         return rsDtoList;
     } //selectList(Product)
 
+    public ArrayList<ProductDto> selectList(String criteria, String keyword) {
+        ArrayList<ProductDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "";
+            switch(criteria){ //검색조건
+                case "차종":
+                    sql += "SELECT * FROM PRODUCTS WHERE CAR_NUM = ?";
+                    break;
+                case "차량가격":
+                    sql += "SELECT * FROM PRODUCTS WHERE PRODUCT_PRICE = ?";
+                    break;
+                case "주문가능여부":
+                    sql += "SELECT * FROM PRODUCTS WHERE PRODUCT_AVAILABLE = ?";
+                    break;
+
+            }
+            ps = con.prepareStatement(sql);
+            ps.setString(1, keyword); //검색어
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ProductDto productDto = new ProductDto();
+                productDto.setCarNum(rs.getString("CAR_NUM"));
+                productDto.setProductPrice(rs.getInt("PRODUCT_PRICE"));
+                productDto.setProductAvailable(rs.getInt("PRODUCT_AVAILABLE"));
+
+                rsDtoList.add(productDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectList(Product)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectList(Product)
+
 }
