@@ -277,6 +277,7 @@ public class UI {
                     loginUser = memberDao.selectOne(id).getMemberNum();
                     if (memberDao.loginUser(loginUser).getAdmin() == 1) {
                         new AdminPage().p03B();
+                        f.setVisible(false);
                     } else {
                         p03();
                     }
@@ -764,7 +765,7 @@ public class UI {
         p.removeAll();
         ProductDao dao = new ProductDao();
         ArrayList<ProductDto> list = dao.selectListAll();
-        String[] header = {"차량고유번호", "차종", "이용상태", "상세"};
+        String[] header = {"차량고유번호", "차종", "상품가격", "상세"};
         model = new DefaultTableModel(data, header);
         table = new JTable(model);
         model.setRowCount(0); // 기존 테이블 모델의 행 제거
@@ -772,7 +773,7 @@ public class UI {
             model.addRow(new Object[]{
                     list.get(i).getProductNum(),
                     dao.getCarDto(list.get(i)).getCarName(),
-                    list.get(i).getProductStatus(),
+                    list.get(i).getProductPrice(),
                     "상세"
             });
         }
@@ -803,6 +804,7 @@ public class UI {
 
         f.add(b2);
         f.add(b3);
+        f.add(p, BorderLayout.CENTER);
         f.add(b4);
 
         b0.addActionListener(new ActionListener() {
@@ -826,7 +828,19 @@ public class UI {
                 String criteria = combo1.getSelectedItem().toString();
                 ProductDao productDao = new ProductDao();
                 ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
-                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]" + list));
+                model.setRowCount(0); // 기존 테이블 모델의 행 제거
+                if(list.isEmpty()) JOptionPane.showMessageDialog(f, "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]");
+                else {
+                    //검색결과 테이블에
+                    for (int i=0; i<list.size(); i++) {
+                        model.addRow(new Object[]{
+                                list.get(i).getProductNum(),
+                                dao.getCarDto(list.get(i)).getCarName(),
+                                list.get(i).getProductPrice(),
+                                "상세"
+                        });
+                    }
+                } //if~else
 
             }
         }); //b11.addActionListener
@@ -928,7 +942,7 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(f, "필터가 등록되었습니다.");
+//                JOptionPane.showMessageDialog(f, "필터가 등록되었습니다.");
 
                 PresetDao presetDao = new PresetDao(); // 쪽지 전달자!!
                 PresetDto presetDto = new PresetDto(); // 쪽지
@@ -941,7 +955,7 @@ public class UI {
 
                 // DAO를 거친 후 result값 리턴받기
                 int result = presetDao.insert(presetDto); //쪽지를 insert (DAO가 insert한다 DTO(쪽지)를 어디에? DB에), result에 성공여부만 알려드림.
-                if (result == 1) JOptionPane.showMessageDialog(f, "필터가 등록되었습니다: " + presetDto);
+                if (result == 1) JOptionPane.showMessageDialog(f, "필터가 등록되었습니다.");
                 else JOptionPane.showMessageDialog(f, "필터가 등록되지 않았습니다.");
 
                 p06();
@@ -1016,6 +1030,7 @@ public class UI {
 
         f.add(b0);
         f.add(l2);
+        f.add(p, BorderLayout.CENTER);
 //        g1.add(r1);
 //        g1.add(r2);
 //        g1.add(r3);
@@ -1053,6 +1068,16 @@ public class UI {
 
                 if (result == 1) {
                     JOptionPane.showMessageDialog(f, "필터가 수정되었습니다.");
+                    model.setRowCount(0); // 기존 테이블 모델의 행 제거
+                    ArrayList<PresetDto> list = presetDao.selectAllList();
+                    for (int i=0; i<list.size(); i++) {
+                        model.addRow(new Object[]{
+                                list.get(i).getPresetNum(),
+                                list.get(i).getPresetComfort(),
+                                list.get(i).getPresetWeight(),
+                                list.get(i).getPresetPassenger()
+                        });
+                    }
                 } else {
                     JOptionPane.showMessageDialog(f, "필터 수정에 실패하였습니다.");
                 }
@@ -1072,10 +1097,22 @@ public class UI {
                 PresetDao presetDao = new PresetDao();
 
                 int result = presetDao.delete(presetNum);
-                if (result == 1) JOptionPane.showMessageDialog(f, "해당 필터가 삭제되었습니다.");
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(f, "해당 필터가 삭제되었습니다.");
+                    model.setRowCount(0); // 기존 테이블 모델의 행 제거
+                    ArrayList<PresetDto> list = presetDao.selectAllList();
+                    for (int i=0; i<list.size(); i++) {
+                        model.addRow(new Object[]{
+                                list.get(i).getPresetNum(),
+                                list.get(i).getPresetComfort(),
+                                list.get(i).getPresetWeight(),
+                                list.get(i).getPresetPassenger()
+                        });
+                    }
+                }
                 else JOptionPane.showMessageDialog(f, "필터삭제에 실패했습니다.");
 
-                p06();
+//                p06();        //삭제후에 굳이 이동을 할 필요가 있을까 싶습니다!
             }
         }); //b2.addActionListener
 
@@ -1119,6 +1156,35 @@ public class UI {
 //        JLabel l6 = new JLabel("/ 탑승인원 l6.setText()");
 
         JButton b1 = new JButton("선택: p07_1()로 이동");
+        // JTable
+        p.removeAll();
+        PresetDao dao = new PresetDao();
+        ArrayList<PresetDto> list = dao.selectAllList();
+        String[] header = {"필터번호", "승차감 좋음 / 보통", "적재량 많음 / 적음", "3인이상 승객 O / X"};
+        model = new DefaultTableModel(data, header);
+        table = new JTable(model);
+        model.setRowCount(0); // 기존 테이블 모델의 행 제거
+        for (int i=0; i<list.size(); i++) {
+            model.addRow(new Object[]{
+                    list.get(i).getPresetNum(),
+                    list.get(i).getPresetComfort(),
+                    list.get(i).getPresetWeight(),
+                    list.get(i).getPresetPassenger(),
+                    "상세"
+            });
+        }
+        final JScrollPane[] scroll = new JScrollPane[1];
+        scroll[0] = new JScrollPane(table);
+        scroll[0].setPreferredSize(new Dimension(320, 320));
+        f.add(p, BorderLayout.CENTER);
+        p.add(scroll[0]);
+        table.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e ) {
+                int row = table.getSelectedRow(); //행
+                selectRowNo = (String)table.getValueAt(row, 0); //열
+            }
+        });
 
         f.add(b0);
         f.add(l2);
@@ -1134,6 +1200,7 @@ public class UI {
 //        f.add(l6);
 
         f.add(b1);
+        f.add(p, BorderLayout.CENTER);
 
 
         b0.addActionListener(new ActionListener() {

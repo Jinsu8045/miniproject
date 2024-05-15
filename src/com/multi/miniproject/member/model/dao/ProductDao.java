@@ -271,7 +271,9 @@ public class ProductDao {
 
             while(rs.next()) {
                 ProductDto productDto = new ProductDto();
+                productDto.setProductNum(rs.getString("PRODUCT_NUM"));
                 productDto.setCarNum(rs.getString("CAR_NUM"));
+                productDto.setProductStatus(rs.getString("PRODUCT_STATUS"));
                 productDto.setProductPrice(rs.getInt("PRODUCT_PRICE"));
                 productDto.setProductAvailable(rs.getInt("PRODUCT_AVAILABLE"));
 
