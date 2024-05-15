@@ -266,7 +266,11 @@ public class UI {
                 if (result) {
                     JOptionPane.showMessageDialog(f, "로그인 성공");
                     loginUser = memberDao.selectOne(id).getMemberNum();
-                    p03();
+                    if(memberDao.loginUser(loginUser).getAdmin()==1) {
+                        p03B();
+                    }else{
+                        p03();
+                    }
                 } else if (id.equals("") || pw.equals("")) {
                     JOptionPane.showMessageDialog(f, "입력되지 않은 값이 있습니다");
                 } else if (memberDao.idCheck(id) == false) {
