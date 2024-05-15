@@ -302,7 +302,7 @@ public class ReviewPage extends UI{
         String[] g2 = {"5", "4", "3", "2", "1"};
         JComboBox combo2 = new JComboBox(g2);
         combo2.setSelectedItem(String.valueOf(dao.reviewDetail(selectRowNo).getRating()));
-        JTextField t3 = new JTextField(50);// 10은 글자수
+        JTextField t3 = new JTextField(30);// 10은 글자수
         t3.setText(dao.reviewDetail(selectRowNo).getContents());
         JButton b1 = new JButton("수정");
         JButton b2 = new JButton("삭제");
