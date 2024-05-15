@@ -31,7 +31,7 @@ public class CarDao {
 
 
         try {
-            String sql = "INSERT INTO CARS VALUES('C||CAR_NUM_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?";
+            String sql = "INSERT INTO CARS VALUES('C||CAR_NUM_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, cardto.getCarName());
@@ -40,6 +40,7 @@ public class CarDao {
             ps.setInt(4, cardto.getCarPrefComfort());
             ps.setInt(5, cardto.getCarPrefWeight());
             ps.setInt(6, cardto.getCarPrefPassenger());
+            ps.setString(7, cardto.getCarImageAddress());
 
 
             result = ps.executeUpdate();
@@ -105,6 +106,7 @@ public class CarDao {
                 rsDto.setCarPrefComfort(rs.getInt("CAR_PREF_COMFORT"));
                 rsDto.setCarPrefWeight(rs.getInt("CAR_PREF_WEIGHT"));
                 rsDto.setCarPrefPassenger(rs.getInt("CAR_PREF_PASSENGER"));
+                rsDto.setCarImageAddress(rs.getString("CAR_IMAGE_ADDRESS"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -184,6 +186,11 @@ public class CarDao {
                 carDto.setCarNum(rs.getString("CAR_NUM"));
                 carDto.setCarName(rs.getString("CAR_NAME"));
                 carDto.setCarCategory(rs.getString("CAR_CATEGORY"));
+                carDto.setCarFeature(rs.getString("CAR_FEATURE"));
+                carDto.setCarPrefComfort(rs.getInt("CAR_PREF_COMFORT"));
+                carDto.setCarPrefWeight(rs.getInt("CAR_PREF_WEIGHT"));
+                carDto.setCarPrefPassenger(rs.getInt("CAR_PREF_PASSENGER"));
+                carDto.setCarImageAddress(rs.getString("CAR_IMAGE_ADDRESS"));
 
                 rsDtoList.add(carDto);
             }
@@ -210,7 +217,11 @@ public class CarDao {
                 carDto.setCarNum(rs.getString("CAR_NUM"));
                 carDto.setCarName(rs.getString("CAR_NAME"));
                 carDto.setCarCategory(rs.getString("CAR_CATEGORY"));
-
+                carDto.setCarFeature(rs.getString("CAR_FEATURE"));
+                carDto.setCarPrefComfort(rs.getInt("CAR_PREF_COMFORT"));
+                carDto.setCarPrefWeight(rs.getInt("CAR_PREF_WEIGHT"));
+                carDto.setCarPrefPassenger(rs.getInt("CAR_PREF_PASSENGER"));
+                carDto.setCarImageAddress(rs.getString("CAR_IMAGE_ADDRESS"));
 
                 rsDtoList.add(carDto);
             }
