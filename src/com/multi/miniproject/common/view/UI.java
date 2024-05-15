@@ -941,7 +941,7 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(f, "필터가 등록되었습니다.");
+//                JOptionPane.showMessageDialog(f, "필터가 등록되었습니다.");
 
                 PresetDao presetDao = new PresetDao(); // 쪽지 전달자!!
                 PresetDto presetDto = new PresetDto(); // 쪽지
@@ -954,7 +954,7 @@ public class UI {
 
                 // DAO를 거친 후 result값 리턴받기
                 int result = presetDao.insert(presetDto); //쪽지를 insert (DAO가 insert한다 DTO(쪽지)를 어디에? DB에), result에 성공여부만 알려드림.
-                if (result == 1) JOptionPane.showMessageDialog(f, "필터가 등록되었습니다: " + presetDto);
+                if (result == 1) JOptionPane.showMessageDialog(f, "필터가 등록되었습니다.");
                 else JOptionPane.showMessageDialog(f, "필터가 등록되지 않았습니다.");
 
                 p06();
@@ -1029,6 +1029,7 @@ public class UI {
 
         f.add(b0);
         f.add(l2);
+        f.add(p, BorderLayout.CENTER);
 //        g1.add(r1);
 //        g1.add(r2);
 //        g1.add(r3);
@@ -1066,6 +1067,16 @@ public class UI {
 
                 if (result == 1) {
                     JOptionPane.showMessageDialog(f, "필터가 수정되었습니다.");
+                    model.setRowCount(0); // 기존 테이블 모델의 행 제거
+                    ArrayList<PresetDto> list = presetDao.selectAllList();
+                    for (int i=0; i<list.size(); i++) {
+                        model.addRow(new Object[]{
+                                list.get(i).getPresetNum(),
+                                list.get(i).getPresetComfort(),
+                                list.get(i).getPresetWeight(),
+                                list.get(i).getPresetPassenger()
+                        });
+                    }
                 } else {
                     JOptionPane.showMessageDialog(f, "필터 수정에 실패하였습니다.");
                 }
@@ -1085,10 +1096,22 @@ public class UI {
                 PresetDao presetDao = new PresetDao();
 
                 int result = presetDao.delete(presetNum);
-                if (result == 1) JOptionPane.showMessageDialog(f, "해당 필터가 삭제되었습니다.");
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(f, "해당 필터가 삭제되었습니다.");
+                    model.setRowCount(0); // 기존 테이블 모델의 행 제거
+                    ArrayList<PresetDto> list = presetDao.selectAllList();
+                    for (int i=0; i<list.size(); i++) {
+                        model.addRow(new Object[]{
+                                list.get(i).getPresetNum(),
+                                list.get(i).getPresetComfort(),
+                                list.get(i).getPresetWeight(),
+                                list.get(i).getPresetPassenger()
+                        });
+                    }
+                }
                 else JOptionPane.showMessageDialog(f, "필터삭제에 실패했습니다.");
 
-                p06();
+//                p06();        //삭제후에 굳이 이동을 할 필요가 있을까 싶습니다!
             }
         }); //b2.addActionListener
 
