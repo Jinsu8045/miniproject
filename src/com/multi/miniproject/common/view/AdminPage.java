@@ -40,23 +40,35 @@ public class AdminPage extends UI {
         f.setLayout(flow);
 
         //페이지제목
+        JButton b0 = new JButton("<-뒤로가기");
         JLabel l1 = new JLabel("p03B : 관리자메뉴");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
+        f.add(b0);
         f.add(l1);
 
         /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
-        JButton b1 = new JButton("회원 관리: p03B_1()으로 이동");
-        JButton b2 = new JButton("상품 관리: p03B_2()으로 이동");
-        JButton b3 = new JButton("주문내역 관리: p03B_3()으로 이동");
-        JButton b4 = new JButton("리뷰 관리: p03B_4()으로 이동");
+        JButton b1 = new JButton("[회원 관리]: p03B_1()으로 이동");
+        JButton b2 = new JButton("[상품 관리]: p03B_2()으로 이동");
+        JButton b3 = new JButton("[주문내역 관리]: p03B_3()으로 이동");
+        JButton b4 = new JButton("[리뷰 관리]: p03B_4()으로 이동");
 
-        f.add(b0);
+//        f.add(b0);
         f.add(b1);
         f.add(b2);
         f.add(b3);
         f.add(b4);
+
+        b0.setBackground(Color.GREEN);
+        b0.setOpaque(true);
+        b1.setBackground(Color.GREEN);
+        b1.setOpaque(true);
+        b2.setBackground(Color.GREEN);
+        b2.setOpaque(true);;
+        b3.setBackground(Color.GREEN);
+        b3.setOpaque(true);
+        b4.setBackground(Color.GREEN);
+        b4.setOpaque(true);
 
         b0.addActionListener(new ActionListener() {
             @Override
@@ -114,20 +126,22 @@ public class AdminPage extends UI {
         f.setLayout(flow);
 
         //페이지제목
+        JButton b0 = new JButton("<-뒤로가기");
         JLabel l1 = new JLabel("p03B_1 : 회원관리");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
+        f.add(b0);
         f.add(l1);
 
         /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
+
         //필터 및 검색
         JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
         String[] g1 = {"회원번호", "아이디", "이름", "이메일", "관리자여부"};
         JComboBox combo1 = new JComboBox(g1);
-        JTextField t1 = new JTextField(20); // 10은 글자수
+        JTextField t1 = new JTextField(12); // 10은 글자수
         JButton b11 = new JButton("[검색]");
         //
 
@@ -164,10 +178,10 @@ public class AdminPage extends UI {
 
         JButton b4 = new JButton("[상세]");
         //
-        JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
-        JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
-        JButton b93 = new JButton("주문내역 관리: p03B_3()으로 이동");
-        JButton b94 = new JButton("리뷰 관리: p03B_4()으로 이동");
+        JButton b91 = new JButton("[회원 관리]");
+        JButton b92 = new JButton("[상품 관리]");
+        JButton b93 = new JButton("[주문내역 관리]");
+        JButton b94 = new JButton("[리뷰 관리]");
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
@@ -190,8 +204,8 @@ public class AdminPage extends UI {
         b94.setBackground(Color.GREEN);
         b94.setOpaque(true);
 
-        f.add(b0);
-        f.add(b1);
+//        f.add(b0);
+//        f.add(b1);
         f.add(combo1);
         f.add(t1);
         f.add(b11);
@@ -329,20 +343,22 @@ public class AdminPage extends UI {
         f.setLayout(flow);
 
         //페이지제목
+        JButton b0 = new JButton("<-뒤로가기");
         JLabel l1 = new JLabel("p03B_2 : 상품관리");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
+        f.add(b0);
         f.add(l1);
 
         /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
+
         //필터 및 검색
         JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
         String[] g1 = {"차량고유번호", "차종번호", "차량상태", "상품가격", "주문가능여부"};
         JComboBox combo1 = new JComboBox(g1);
-        JTextField t1 = new JTextField(20); // 10은 글자수
+        JTextField t1 = new JTextField(12); // 10은 글자수
         JButton b11 = new JButton("[검색]");
         JButton b2 = new JButton("선택해제: 미구현");
         JButton b3 = new JButton("[등록]");
@@ -378,10 +394,10 @@ public class AdminPage extends UI {
 
         JButton b4 = new JButton("[수정]");
         //
-        JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
-        JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
-        JButton b93 = new JButton("주문내역 관리: p03B_3()으로 이동");
-        JButton b94 = new JButton("리뷰 관리: p03B_4()으로 이동");
+        JButton b91 = new JButton("[회원 관리]");
+        JButton b92 = new JButton("[상품 관리]");
+        JButton b93 = new JButton("[주문내역 관리]");
+        JButton b94 = new JButton("[리뷰 관리]");
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
@@ -406,8 +422,8 @@ public class AdminPage extends UI {
         b94.setBackground(Color.GREEN);
         b94.setOpaque(true);
 
-        f.add(b0);
-        f.add(b1);
+//        f.add(b0);
+//        f.add(b1);
         f.add(combo1);
         f.add(t1);
         f.add(b11);
@@ -613,19 +629,20 @@ public class AdminPage extends UI {
         f.setLayout(flow);
 
         //페이지제목
-        JLabel l1 = new JLabel("p03B_3 : 주문내역관리");
+        JButton b0 = new JButton("<-뒤로가기");
+        JLabel l1 = new JLabel("p03B_3 : 주문관리");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
+        f.add(b0);
         f.add(l1);
         /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
         //필터 및 검색
         JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
         String[] g1 = {"주문번호", "회원번호", "차량고유번호", "주문상태", "환불요청여부", "환불처리여부"};
         JComboBox combo1 = new JComboBox(g1);
-        JTextField t1 = new JTextField(20); // 10은 글자수
+        JTextField t1 = new JTextField(12); // 10은 글자수
         JButton b11 = new JButton("[검색]");
         //
 
@@ -662,10 +679,10 @@ public class AdminPage extends UI {
 
         JButton b4 = new JButton("[상세]");
         //
-        JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
-        JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
-        JButton b93 = new JButton("주문내역 관리: p03B_3()으로 이동");
-        JButton b94 = new JButton("리뷰 관리: p03B_4()으로 이동");
+        JButton b91 = new JButton("[회원 관리]");
+        JButton b92 = new JButton("[상품 관리]");
+        JButton b93 = new JButton("[주문내역 관리]");
+        JButton b94 = new JButton("[리뷰 관리]");
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
@@ -688,8 +705,8 @@ public class AdminPage extends UI {
         b94.setBackground(Color.GREEN);
         b94.setOpaque(true);
 
-        f.add(b0);
-        f.add(b1);
+//        f.add(b0);
+//        f.add(b1);
         f.add(combo1);
         f.add(t1);
         f.add(b11);
@@ -824,20 +841,21 @@ public class AdminPage extends UI {
         f.setLayout(flow);
 
         //페이지제목
+        JButton b0 = new JButton("<-뒤로가기");
         JLabel l1 = new JLabel("p03B_4 : 리뷰관리");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
+        f.add(b0);
         f.add(l1);
 
         /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
         //필터 및 검색
         JButton b1 = new JButton("필터 적용: 미구현");
         // 검색버튼 구현
         //combobox
         String[] g1 = {"리뷰번호", "주문번호", "차종평가별점", "후기제목", "후기내용"};
         JComboBox combo1 = new JComboBox(g1);
-        JTextField t1 = new JTextField(20); // 10은 글자수
+        JTextField t1 = new JTextField(12); // 10은 글자수
         JButton b11 = new JButton("[검색]");
         //
 
@@ -873,10 +891,10 @@ public class AdminPage extends UI {
         });
         JButton b4 = new JButton("[상세]");
         //
-        JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
-        JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
-        JButton b93 = new JButton("주문내역 관리: p03B_3()으로 이동");
-        JButton b94 = new JButton("리뷰 관리: p03B_4()으로 이동");
+        JButton b91 = new JButton("[회원 관리]");
+        JButton b92 = new JButton("[상품 관리]");
+        JButton b93 = new JButton("[주문내역 관리]");
+        JButton b94 = new JButton("[리뷰 관리]");
 
         b0.setBackground(Color.GREEN);
         b0.setOpaque(true);
@@ -899,8 +917,8 @@ public class AdminPage extends UI {
         b94.setBackground(Color.GREEN);
         b94.setOpaque(true);
 
-        f.add(b0);
-        f.add(b1);
+//        f.add(b0);
+//        f.add(b1);
         f.add(combo1);
         f.add(t1);
         f.add(b11);
