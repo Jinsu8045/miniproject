@@ -277,6 +277,7 @@ public class UI {
                     loginUser = memberDao.selectOne(id).getMemberNum();
                     if (memberDao.loginUser(loginUser).getAdmin() == 1) {
                         new AdminPage().p03B();
+                        f.setVisible(false);
                     } else {
                         p03();
                     }
@@ -1155,6 +1156,35 @@ public class UI {
 //        JLabel l6 = new JLabel("/ 탑승인원 l6.setText()");
 
         JButton b1 = new JButton("선택: p07_1()로 이동");
+        // JTable
+        p.removeAll();
+        PresetDao dao = new PresetDao();
+        ArrayList<PresetDto> list = dao.selectAllList();
+        String[] header = {"필터번호", "승차감 좋음 / 보통", "적재량 많음 / 적음", "3인이상 승객 O / X"};
+        model = new DefaultTableModel(data, header);
+        table = new JTable(model);
+        model.setRowCount(0); // 기존 테이블 모델의 행 제거
+        for (int i=0; i<list.size(); i++) {
+            model.addRow(new Object[]{
+                    list.get(i).getPresetNum(),
+                    list.get(i).getPresetComfort(),
+                    list.get(i).getPresetWeight(),
+                    list.get(i).getPresetPassenger(),
+                    "상세"
+            });
+        }
+        final JScrollPane[] scroll = new JScrollPane[1];
+        scroll[0] = new JScrollPane(table);
+        scroll[0].setPreferredSize(new Dimension(320, 320));
+        f.add(p, BorderLayout.CENTER);
+        p.add(scroll[0]);
+        table.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e ) {
+                int row = table.getSelectedRow(); //행
+                selectRowNo = (String)table.getValueAt(row, 0); //열
+            }
+        });
 
         f.add(b0);
         f.add(l2);
@@ -1170,6 +1200,7 @@ public class UI {
 //        f.add(l6);
 
         f.add(b1);
+        f.add(p, BorderLayout.CENTER);
 
 
         b0.addActionListener(new ActionListener() {
