@@ -335,6 +335,38 @@ public class MemberDao {
 
     }
 
+    public ArrayList<MemberDto> selectListAll() {
+        ArrayList<MemberDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM MEMBERS";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                MemberDto memberDto = new MemberDto();
+                memberDto.setMemberNum(rs.getString("MEMBER_NUM"));
+                memberDto.setId(rs.getString("ID"));
+                memberDto.setPw(rs.getString("PW"));
+                memberDto.setName(rs.getString("NAME"));
+                memberDto.setEmailID(rs.getString("EMAIL_ID"));
+                memberDto.setEmailSite(rs.getString("EMAIL_SITE"));
+                memberDto.setAdmin(rs.getInt("ADMIN"));
+
+                memberDto.setEmail(); //KHG CHECK
+                rsDtoList.add(memberDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectList(Member)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectListAll(Member) dev by HGKANG
+
     public ArrayList<MemberDto> selectList(int criteria, String keyword) {
         ArrayList<MemberDto> rsDtoList = new ArrayList<>();
         PreparedStatement ps = null;
@@ -397,3 +429,4 @@ public class MemberDao {
 
 
 }
+//

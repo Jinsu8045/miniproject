@@ -102,6 +102,36 @@ public class ReviewDao {
 
     } //selectOne(Review)
 
+    public ArrayList<ReviewDto> selectListAll() {
+        ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM REVIEWS";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ReviewDto reviewDto = new ReviewDto();
+                reviewDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                reviewDto.setOrderNum(rs.getString("ORDER_NUM"));
+                reviewDto.setRating(rs.getInt("RATING"));
+                reviewDto.setTitle(rs.getString("TITLE"));
+                reviewDto.setContents(rs.getString("CONTENTS"));
+                System.out.println(reviewDto);
+
+                rsDtoList.add(reviewDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectList(Review)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectListAll(Order) dev by HGKANG
+
     public ArrayList<ReviewDto> selectList(int criteria, String keyword) {
         ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
         PreparedStatement ps = null;
@@ -451,3 +481,4 @@ public class ReviewDao {
 
     }
 }
+//

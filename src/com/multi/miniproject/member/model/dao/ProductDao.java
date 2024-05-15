@@ -4,6 +4,7 @@ import com.multi.miniproject.common.DBConnectionMgr;
 import com.multi.miniproject.member.model.dto.CarDto;
 import com.multi.miniproject.member.model.dto.MemberDto;
 import com.multi.miniproject.member.model.dto.ProductDto;
+import com.multi.miniproject.member.model.dto.ReviewDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -169,6 +170,35 @@ public class ProductDao {
 
     } //selectOne()
 
+    public ArrayList<ProductDto> selectListAll() {
+        ArrayList<ProductDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM PRODUCTS";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ProductDto productDto = new ProductDto();
+                productDto.setProductNum(rs.getString("PRODUCT_NUM"));
+                productDto.setCarNum(rs.getString("CAR_NUM"));
+                productDto.setProductStatus(rs.getString("PRODUCT_STATUS"));
+                productDto.setProductPrice(rs.getInt("PRODUCT_PRICE"));
+                productDto.setProductAvailable(rs.getInt("PRODUCT_AVAILABLE"));
+
+                rsDtoList.add(productDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectList(Product)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectListAll(Product)
+
     public ArrayList<ProductDto> selectList(int criteria, String keyword) {
         ArrayList<ProductDto> rsDtoList = new ArrayList<>();
         PreparedStatement ps = null;
@@ -255,5 +285,5 @@ public class ProductDao {
 
         return rsDtoList;
     } //selectList(Product)
-
 }
+//
