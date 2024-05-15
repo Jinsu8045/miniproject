@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class PresetDao {
 
@@ -141,6 +142,35 @@ public class PresetDao {
 
 
         return result;
+    }
+
+    public ArrayList<PresetDto> selectAllList() {
+        ArrayList<PresetDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM PRESETS";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                PresetDto presetDto = new PresetDto();
+                presetDto.setPresetNum(rs.getString("PRESET_NUM"));
+                presetDto.setPresetComfort(rs.getInt("PRESET_COMFORT"));
+                presetDto.setPresetWeight(rs.getInt("PRESET_WEIGHT"));
+                presetDto.setPresetPassenger(rs.getInt("PRESET_PASSENGER"));
+
+                rsDtoList.add(presetDto);
+            }
+        } catch (SQLException e) {
+            System.out.println("SelectListAll(Preset)시 에러발생!");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+
     }
 
 //    public PresetDto selectOne1(String presetNum) {
