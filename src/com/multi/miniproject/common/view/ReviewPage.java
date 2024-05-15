@@ -6,6 +6,7 @@ import com.multi.miniproject.member.model.dto.MemberDto;
 import com.multi.miniproject.member.model.dto.ReviewDto;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,8 @@ public class ReviewPage extends UI{
 
     String selectRowNo = "null";
     JPanel p = new JPanel();
+    JTable table = null;
+    DefaultTableModel model = null; //
 
 
 
@@ -60,25 +63,25 @@ public class ReviewPage extends UI{
         /////////////////////////////////////////////////////////
         p.removeAll();
         ReviewDao dao = new ReviewDao();
-        ArrayList<ReviewDto> list = dao.latestlist(); // ArrayList<MemberDTO>
+        ArrayList<ReviewDto> latestlist = dao.latestlist(); // ArrayList<MemberDTO>
 
         String[] header = {"no", "Title", "car", "writer"};
-        Object[][] data = new Object[list.size()][4];
+        Object[][] data = new Object[latestlist.size()][4];
 
-        if (list.size() == 0) {
+        if (latestlist.size() == 0) {
             System.out.println("검색결과 없음. ");
         } else {
 //            System.out.println("검색결과는 전체 " + list.size() + "개 입니다.");
-            for (int i = 0; i < list.size(); i++) {
-                data[i][0] = list.get(i).getReviewNum();
-                data[i][1] = list.get(i).getTitle();
-                data[i][2] = list.get(i).getCar_num();
-                data[i][3] = list.get(i).getWriter();
+            for (int i = 0; i < latestlist.size(); i++) {
+                data[i][0] = latestlist.get(i).getReviewNum();
+                data[i][1] = latestlist.get(i).getTitle();
+                data[i][2] = latestlist.get(i).getCar_num();
+                data[i][3] = latestlist.get(i).getWriter();
             }
         }
 
-//        DefaultTableModel model = new DefaultTableModel();
-        JTable table = new JTable(data, header);
+        model = new DefaultTableModel(data, header);
+       table = new JTable(model);
 
         final JScrollPane[] scroll = new JScrollPane[1];
         scroll[0] = new JScrollPane(table);
@@ -97,6 +100,7 @@ public class ReviewPage extends UI{
                 System.out.println("선택된 행의 no 값: " + selectRowNo);
             }
         });
+
 
         f.add(combo1);
         f.add(t1);
@@ -127,9 +131,30 @@ public class ReviewPage extends UI{
 
             }
         }); //b1.addActionListener
+
+
+
         b11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                ReviewDao dao = new ReviewDao();
+
+                String criteria = combo1.getSelectedItem().toString();
+                String keyword = t1.getText();
+
+                ArrayList<ReviewDto> selectList = dao.selectList(criteria,keyword);
+
+                model.setRowCount(0); // 기존 테이블 모델의 행 제거
+
+                for (ReviewDto review : selectList) {
+                    model.addRow(new Object[]{
+                            review.getReviewNum(),
+                            review.getTitle(),
+                            review.getCar_num(),
+                            review.getWriter()
+                    });
+                }
 
             }
         }); //b11.addActionListener

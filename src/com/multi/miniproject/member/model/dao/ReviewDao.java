@@ -163,13 +163,13 @@ public class ReviewDao {
             String sql = "";
             switch(criteria){ //검색조건
                 case "아이디":
-                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND WRITER = ?";
+                    sql += "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND WRITER = ?";
                     break;
                 case "제목":
-                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND TITLE = ?";
+                    sql += "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND TITLE = ?";
                     break;
                 case "차종":
-                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND CAR_NUM = ?";
+                    sql += "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND CAR_NUM = ?";
                     break;
             }//REVIEWS가 아니고 VIEW 불러오기.
 
