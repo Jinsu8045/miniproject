@@ -162,7 +162,7 @@ public class AdminPage extends UI {
             }
         });
 
-        JButton b4 = new JButton("회원M3(admin) [상세]");
+        JButton b4 = new JButton("[상세]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -271,7 +271,7 @@ public class AdminPage extends UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //회원 상세(R) 구현
-                String tmp = "admin";
+                String tmp = selectRowNo;
                 MemberDao memberDao = new MemberDao();
                 MemberDto rsDto = memberDao.selectOne(tmp);
                 //rsDto를 다시 DAO를 통해 DB로보냄.
@@ -375,7 +375,7 @@ public class AdminPage extends UI {
             }
         });
 
-        JButton b4 = new JButton("상품 P4의 상세 [수정]");
+        JButton b4 = new JButton("[수정]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -537,7 +537,7 @@ public class AdminPage extends UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 상품 상세 수정(U) //행 파라미터 함수로 다시 구현해야함
-                String tmp = "P4";
+                String tmp = selectRowNo;
                 ProductDao productDao = new ProductDao();
                 ProductDto rsDto = productDao.selectOne(tmp);
                 //수정을 위해 다이얼로그를 띄움
@@ -659,7 +659,7 @@ public class AdminPage extends UI {
             }
         });
 
-        JButton b4 = new JButton("주문O7 [상세]");
+        JButton b4 = new JButton("[상세]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -766,7 +766,7 @@ public class AdminPage extends UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //주문 상세(R) 구현
-                String tmp = "O7";
+                String tmp = selectRowNo;
                 OrderDao orderDao = new OrderDao();
                 OrderDto rsDto = orderDao.selectOne(tmp);
                 //rsDto를 다시 DAO를 통해 DB로보냄.
@@ -870,7 +870,7 @@ public class AdminPage extends UI {
                 selectRowNo = (String)table.getValueAt(row, 0); //열
             }
         });
-        JButton b4 = new JButton("리뷰R5 [상세]");
+        JButton b4 = new JButton("[상세]");
         //
         JButton b91 = new JButton("회원 관리: p03B_1()으로 이동");
         JButton b92 = new JButton("상품 관리: p03B_2()으로 이동");
@@ -978,7 +978,7 @@ public class AdminPage extends UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //리뷰 상세(R) 구현
-                String tmp = "R5";
+                String tmp = selectRowNo;
                 ReviewDao reviewDao = new ReviewDao();
                 ReviewDto rsDto = reviewDao.selectOne(tmp);
                 //rsDto를 다시 DAO를 통해 DB로보냄.

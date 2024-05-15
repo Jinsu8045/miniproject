@@ -399,7 +399,7 @@ public class MemberDao {
                 String[] splitted = keyword.split("@");
                 if(splitted.length == 2) {
                     ps.setString(1, splitted[0]); //검색어
-                    ps.setString(2, splitted[1]); //검색어
+                    ps.setString(2, "@"+splitted[1]); //검색어
                 }
                 else ps.setString(1, keyword);
             }
