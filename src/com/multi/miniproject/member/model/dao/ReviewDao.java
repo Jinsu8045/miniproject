@@ -2,13 +2,9 @@ package com.multi.miniproject.member.model.dao;
 
 import com.multi.miniproject.common.DBConnectionMgr;
 import com.multi.miniproject.member.model.dto.OrderDto;
-import com.multi.miniproject.member.model.dto.ProductDto;
 import com.multi.miniproject.member.model.dto.ReviewDto;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ReviewDao {
@@ -163,13 +159,13 @@ public class ReviewDao {
             String sql = "";
             switch(criteria){ //검색조건
                 case "아이디":
-                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND WRITER = ?";
+                    sql += "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND WRITER = ?";
                     break;
                 case "제목":
-                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND TITLE = ?";
+                    sql += "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND TITLE = ?";
                     break;
                 case "차종":
-                    sql += "SELECT * V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND CAR_NUM = ?";
+                    sql += "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL AND CAR_NUM = ?";
                     break;
             }//REVIEWS가 아니고 VIEW 불러오기.
 
@@ -201,24 +197,26 @@ public class ReviewDao {
         ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
+        ReviewDto rsDto = null;
 
         try {
             String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            while(rs.next()) {
-                ReviewDto reviewDto = new ReviewDto();
-                reviewDto.setReviewNum(rs.getString("REVIEW_NUM"));
-                reviewDto.setTitle(rs.getString("TITLE"));
-                reviewDto.setCar_num(rs.getString("CAR_NUM"));
-                reviewDto.setWriter(rs.getString("WRITER"));
-//                reviewDto.setOrderNum(rs.getString("ORDER_NUM"));
-//                reviewDto.setRating(rs.getInt("RATING"));
-//                reviewDto.setContents(rs.getString("CONTENTS"));
-                System.out.println(reviewDto);
 
-                rsDtoList.add(reviewDto);
+            while(rs.next()) {
+                rsDto = new ReviewDto();
+                rsDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                rsDto.setTitle(rs.getString("TITLE"));
+                rsDto.setCar_num(rs.getString("CAR_NUM"));
+                rsDto.setWriter(rs.getString("WRITER"));
+//                rsDto.setOrderNum(rs.getString("ORDER_NUM"));
+//                rsDto.setRating(rs.getInt("RATING"));
+//                rsDto.setContents(rs.getString("CONTENTS"));
+//                System.out.println(rsDto); //확인용
+
+                rsDtoList.add(rsDto);
             }
 
         } catch(SQLException e) {
@@ -229,4 +227,227 @@ public class ReviewDao {
         return rsDtoList;
     } //selectList(Review) //user 사용용 수정해야함.
 
+    public ReviewDto reviewDetail(String selectRowNo) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ReviewDto rsDto = null;
+
+        try {
+            String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, selectRowNo);
+            rs = ps.executeQuery();
+
+            if(rs.next()){
+                rsDto = new ReviewDto();
+                rsDto.setReviewNum(rs.getString("REVIEW_NUM"));
+                rsDto.setTitle(rs.getString("TITLE"));
+                rsDto.setCar_num(rs.getString("CAR_NUM"));
+                rsDto.setWriter(rs.getString("WRITER"));
+                rsDto.setOrderNum(rs.getString("ORDER_NUM"));
+                rsDto.setRating(rs.getInt("RATING"));
+                rsDto.setContents(rs.getString("CONTENTS"));
+            }
+        } catch(SQLException e) {
+            System.out.println("selectOne(reviewNum)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDto;
+
+
+
+    }
+
+    public int reviewUpdate(String selectRowNo, int rating, String title, String contents) {
+        int result = 0;
+
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "UPDATE REVIEWS SET RATING = ?, TITLE = ?, CONTENTS = ? WHERE REVIEW_NUM = ?";
+            ps = con.prepareStatement(sql);
+
+            ps.setString(4,selectRowNo);
+            ps.setInt(1,rating);
+            ps.setString(2,title);
+            ps.setString(3,contents);
+
+            result = ps.executeUpdate();
+
+            if(result > 0){
+                con.commit();
+            }else{
+                con.rollback();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("update error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        }finally {
+            dbcp.freeConnection(con, ps);
+        }
+
+        return result;
+
+    }
+
+    public int reviewDelete(String selectRowNo) {
+        int result = 0;
+
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "DELETE FROM REVIEWS WHERE REVIEW_NUM = ?";
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1,selectRowNo);
+
+            result = ps.executeUpdate();
+
+            if(result > 0){
+                con.commit();
+            }else{
+                con.rollback();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("delete error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        }finally {
+            dbcp.freeConnection(con, ps);
+        }
+
+        return result;
+
+
+    }
+
+    public ArrayList<ReviewDto> userReviewlist(String loginUserID) {
+        ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ReviewDto rsDto = null;
+
+        try {
+            String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NULL AND WRITER = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,loginUserID);
+
+
+            rs = ps.executeQuery();
+
+
+            while(rs.next()) {
+                rsDto = new ReviewDto();
+                rsDto.setCar_num(rs.getString("CAR_NUM"));
+
+                rsDtoList.add(rsDto);
+            }
+
+        } catch(SQLException e) {
+            System.out.println("selectList(Review)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+        return rsDtoList;
+
+
+
+    }
+
+    public ReviewDto userReviewlist(String loginUserID,String Car_Num) {
+//        ArrayList<ReviewDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ReviewDto rsDto = null;
+
+        try {
+            String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NULL " +
+                    "AND WRITER = ? " +
+                    "AND CAR_NUM = ? "+
+                    "AND ROWNUM = 1 ";
+            ps = con.prepareStatement(sql);
+            ps.setString(1,loginUserID);
+            ps.setString(2,Car_Num);
+
+
+            rs = ps.executeQuery();
+
+
+            while(rs.next()) {
+                rsDto = new ReviewDto();
+                rsDto.setCar_num(rs.getString("CAR_NUM"));
+                rsDto.setOrderNum(rs.getString("ORDER_NUM"));
+
+                System.out.println(rsDto.getOrderNum());
+            }
+
+        } catch(SQLException e) {
+            System.out.println("selectList(Review)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+        return rsDto;
+
+
+
+    }
+
+    public int reviewInsert(String orderNum, int rating, String title, String contents) {
+        int result = 0;
+
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "INSERT INTO REVIEWS VALUES(''||REVIEW_NUM_SEQ.NEXTVAL,?,?,?,?)";
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1,orderNum);
+            ps.setInt(2,rating);
+            ps.setString(3,title);
+            ps.setString(4,contents);
+
+
+            result = ps.executeUpdate();
+
+            if(result > 0){
+                con.commit();
+            }else{
+                con.rollback();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("insert error");
+
+            try {
+                con.rollback();
+            } catch (SQLException ex) {
+                e.printStackTrace();
+            }
+
+        }finally {
+            dbcp.freeConnection(con, ps);
+        }
+
+
+        return result;
+
+    }
 }
