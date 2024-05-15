@@ -132,6 +132,35 @@ public class OrderDao {
 
     } //selectOne(Review)
 
+    public ArrayList<OrderDto> selectListAll() {
+        ArrayList<OrderDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM ORDERS";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                OrderDto orderDto = new OrderDto();
+                orderDto.setOrderNum(rs.getString("ORDER_NUM"));
+                orderDto.setMemberNum(rs.getString("MEMBER_NUM"));
+                orderDto.setProductNum(rs.getString("PRODUCT_NUM"));
+                orderDto.setOrderStatus(rs.getInt("ORDER_STATUS"));
+                orderDto.setOrderRefundRequest(rs.getInt("ORDER_REFUND_REQUEST"));
+                orderDto.setOrderRefundComplete(rs.getInt("ORDER_REFUND_COMPLETE"));
+
+                rsDtoList.add(orderDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectList(Order)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectListAll(Order) dev by HGKANG
 
     public ArrayList<OrderDto> selectList(int criteria, String keyword) {
         ArrayList<OrderDto> rsDtoList = new ArrayList<>();
@@ -172,7 +201,6 @@ public class OrderDao {
                 orderDto.setOrderStatus(rs.getInt("ORDER_STATUS"));
                 orderDto.setOrderRefundRequest(rs.getInt("ORDER_REFUND_REQUEST"));
                 orderDto.setOrderRefundComplete(rs.getInt("ORDER_REFUND_COMPLETE"));
-                System.out.println(orderDto);
 
                 rsDtoList.add(orderDto);
             }
