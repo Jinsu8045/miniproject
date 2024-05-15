@@ -174,6 +174,9 @@ public class ReviewPage extends UI{
     public void p05_1() {
         //JFrame 정의
 //        f = new JFrame();
+        ReviewDao dao = new ReviewDao();
+        MemberDao mDao = new MemberDao();
+
         f.getContentPane().removeAll();
         f.repaint();
         f.setSize(400, 600);
@@ -194,12 +197,23 @@ public class ReviewPage extends UI{
         JLabel l2 = new JLabel("제목");
         JTextField t2 = new JTextField(30); // 10은 글자수
         //combobox1: 내가 작성할 리뷰 선택
-        String[] g1 = {"주문이력이 없음", "기타"};
-        JComboBox combo1 = new JComboBox(g1);
+
+        JComboBox combo1 = new JComboBox();
+        ArrayList<ReviewDto> yetreviewlist = dao.userReviewlist(mDao.loginUser(loginUser).getId());
+        if(yetreviewlist.isEmpty()) {
+            String[] g1 = {"주문이력이 없음"};
+            combo1.addItem(g1);
+
+        }else{
+            for (ReviewDto review : yetreviewlist) {
+                combo1.addItem(review.getCar_num());
+                }
+        }
+
         String[] g2 = {"5", "4", "3", "2", "1"};
         JComboBox combo2 = new JComboBox(g2);
         JTextField t3 = new JTextField(50); // 10은 글자수
-        t3.setText("내용을 입력해주세요.내용을 입력해주세요.");
+        t3.setText("내용을 입력해주세요.");
 
         JButton b1 = new JButton("리뷰 등록");
 
@@ -223,8 +237,30 @@ public class ReviewPage extends UI{
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(f, "리뷰가 등록되었습니다.");
-                p05();
+
+
+                int rating = Integer.parseInt(combo2.getSelectedItem().toString());
+                String selectOrder = combo1.getSelectedItem().toString();
+                String orderNum = dao.userReviewlist(mDao.loginUser(loginUser).getId(),selectOrder).getOrderNum();
+                //같은 차종이 여러개일 경우 먼저 order된 순서로 작성
+                String title = t2.getText();
+                String contents = t3.getText();
+
+                if(contents.equals("내용을 입력해주세요.")||contents.equals("")){
+                    JOptionPane.showMessageDialog(f, "내용이 작성되지 않았습니다.");
+                }else if(title.equals("")) {
+                    JOptionPane.showMessageDialog(f, "제목을 입력해주세요.");
+                }else if(selectOrder.equals("주문이력이 없음")) {
+                    JOptionPane.showMessageDialog(f, "작성 할 수 있는 리뷰가 없습니다.");
+                }else {
+                    int result = dao.reviewInsert(orderNum, rating, title, contents);
+                    if (result == 1) {
+                        JOptionPane.showMessageDialog(f, "리뷰가 등록되었습니다.");
+                        p05();
+                    } else {
+                        JOptionPane.showMessageDialog(f, "리뷰 등록 실패. 재시도 해주세요.");
+                    }
+                }
             }
         }); //b1.addActionListener
 
@@ -293,11 +329,20 @@ public class ReviewPage extends UI{
             public void actionPerformed(ActionEvent e) {
                 MemberDao mDao = new MemberDao();
 
-                if (dao.reviewDetail(selectRowNo).getWriter().equals(mDao.loginUser(loginUser).getId())) {
-                    //update만들기
+//                String orderNum = dao.reviewDetail(selectRowNo).getOrderNum();
+                int rating = Integer.parseInt(combo2.getSelectedItem().toString());
+                String title = t2.getText();
+                String contents = t3.getText();
 
-                    JOptionPane.showMessageDialog(f, "수정되었습니다.");
-                    p05();
+                if (dao.reviewDetail(selectRowNo).getWriter().equals(mDao.loginUser(loginUser).getId())) {
+                    int result = dao.reviewUpdate(selectRowNo, rating , title, contents);
+                    if (result == 1) {
+                        JOptionPane.showMessageDialog(f, "수정되었습니다.");
+                        p05();
+                    } else {
+                        JOptionPane.showMessageDialog(f, "리뷰 수정 실패. 재시도 해주세요.");
+                    }
+
                 }else{
                     JOptionPane.showMessageDialog(f, "수정 권한이 없습니다.");
                 }
@@ -309,10 +354,17 @@ public class ReviewPage extends UI{
             public void actionPerformed(ActionEvent e) {
                 MemberDao mDao = new MemberDao();
                 if (dao.reviewDetail(selectRowNo).getWriter().equals(mDao.loginUser(loginUser).getId())) {
-                    //delete 만들기
-
-                    JOptionPane.showMessageDialog(f, "삭제되었습니다.");
-                    p05();
+                    String anwser = JOptionPane.showInputDialog("정말 삭제하시겠습니다? 삭제된 리뷰는 복구가 불가합니다.(1/0)");
+                    if(anwser.equals("1")){
+                    int result = dao.reviewDelete(selectRowNo);
+                    if (result == 1) {
+                        JOptionPane.showMessageDialog(f, "삭제되었습니다.");
+                        p05();
+                    } else {
+                        JOptionPane.showMessageDialog(f, "리뷰 삭제 실패. 재시도 해주세요.");
+                    }}else{
+                        JOptionPane.showMessageDialog(f, "삭제요청이 취소되었습니다.");
+                    }
                 }else{
                     JOptionPane.showMessageDialog(f, "삭제 권한이 없습니다.");
                 }
