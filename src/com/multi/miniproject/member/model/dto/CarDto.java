@@ -18,11 +18,12 @@ public class CarDto {
     private int carPrefComfort;
     private int carPrefWeight;
     private int carPrefPassenger;
+    private String carImageAddress;
 
 
     public CarDto(){}
 
-    public CarDto(String carNum, String carName, String carCategory, String carFeature, int carPrefComfort, int carPrefWeight, int carPrefPassenger) {
+    public CarDto(String carNum, String carName, String carCategory, String carFeature, int carPrefComfort, int carPrefWeight, int carPrefPassenger, String carImageAddress) {
         this.carNum = carNum;
         this.carName = carName;
         this.carCategory = carCategory;
@@ -30,8 +31,8 @@ public class CarDto {
         this.carPrefComfort = carPrefComfort;
         this.carPrefWeight = carPrefWeight;
         this.carPrefPassenger = carPrefPassenger;
+        this.carImageAddress = carImageAddress;
     }
-
 
     public String getCarNum() {
         return carNum;
@@ -89,6 +90,13 @@ public class CarDto {
         this.carPrefPassenger = carPrefPassenger;
     }
 
+    public String getCarImageAddress() {
+        return carImageAddress;
+    }
+
+    public void setCarImageAddress(String carImageAddress) {
+        this.carImageAddress = carImageAddress;
+    }
 
     @Override
     public String toString() {
@@ -100,6 +108,7 @@ public class CarDto {
                 ", carPrefComfort=" + carPrefComfort +
                 ", carPrefWeight=" + carPrefWeight +
                 ", carPrefPassenger=" + carPrefPassenger +
+                ", carImageAddress='" + carImageAddress + '\'' +
                 '}';
     }
 }

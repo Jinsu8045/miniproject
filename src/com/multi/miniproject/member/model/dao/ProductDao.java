@@ -1,10 +1,7 @@
 package com.multi.miniproject.member.model.dao;
 
 import com.multi.miniproject.common.DBConnectionMgr;
-import com.multi.miniproject.member.model.dto.CarDto;
-import com.multi.miniproject.member.model.dto.MemberDto;
-import com.multi.miniproject.member.model.dto.ProductDto;
-import com.multi.miniproject.member.model.dto.ReviewDto;
+import com.multi.miniproject.member.model.dto.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,6 +43,8 @@ public class ProductDao {
                 rsDto.setCarPrefComfort(rs.getInt("CAR_PREF_COMFORT"));
                 rsDto.setCarPrefWeight(rs.getInt("CAR_PREF_WEIGHT"));
                 rsDto.setCarPrefPassenger(rs.getInt("CAR_PREF_PASSENGER"));
+                rsDto.setCarImageAddress(rs.getString("CAR_IMAGE_ADDRESS"));
+
             }
         } catch(SQLException e) {
             System.out.println("getCarDto시 에러발생");
@@ -198,6 +197,40 @@ public class ProductDao {
 
         return rsDtoList;
     } //selectListAll(Product)
+
+    public ArrayList<ProductDto> selectListByPreset(String presetNum) {
+        ArrayList<ProductDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        PresetDto selectedPresetDto = new PresetDao().selectOne(presetNum);
+
+        try {
+            String sql = "SELECT A.PRODUCT_NUM, A.CAR_NUM, A.PRODUCT_STATUS, A.PRODUCT_PRICE, A.PRODUCT_AVAILABLE FROM PRODUCTS A INNER JOIN CARS B ON A.CAR_NUM = B.CAR_NUM WHERE B.CAR_PREF_COMFORT = ? AND B.CAR_PREF_WEIGHT = ? AND B.CAR_PREF_PASSENGER = ?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, selectedPresetDto.getPresetComfort());
+            ps.setInt(2, selectedPresetDto.getPresetWeight());
+            ps.setInt(3, selectedPresetDto.getPresetPassenger());
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ProductDto productDto = new ProductDto();
+                productDto.setProductNum(rs.getString("PRODUCT_NUM"));
+                productDto.setCarNum(rs.getString("CAR_NUM"));
+                productDto.setProductStatus(rs.getString("PRODUCT_STATUS"));
+                productDto.setProductPrice(rs.getInt("PRODUCT_PRICE"));
+                productDto.setProductAvailable(rs.getInt("PRODUCT_AVAILABLE"));
+
+                rsDtoList.add(productDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectListByPreset(Product)시 에러발생2");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectListByPreset(Product)
 
     public ArrayList<ProductDto> selectList(int criteria, String keyword) {
         ArrayList<ProductDto> rsDtoList = new ArrayList<>();

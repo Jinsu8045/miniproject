@@ -18,10 +18,12 @@ public class UI {
     static String loginUser = null;
 
     String selectRowNo = "null";
+    String selectRowNoTmp = "null";
     JPanel p = new JPanel();
     JTable table = null;
     DefaultTableModel model = null;
     Object[][] data = null;
+    int prev = 0 ; // p07_2() 뒤로가기시 사용
 
 
     public void p01() {
@@ -762,6 +764,7 @@ public class UI {
         JButton b11 = new JButton("검색");
 
         // JTable
+        selectRowNoTmp = selectRowNo;
         p.removeAll();
         ProductDao dao = new ProductDao();
         ArrayList<ProductDto> list = dao.selectListAll();
@@ -794,7 +797,7 @@ public class UI {
         JButton b2 = new JButton("필터 등록: p06_1()로 이동");
         JButton b3 = new JButton("필터 수정/삭제: p06_2()로 이동");
 
-        JButton b4 = new JButton("차량X 상세: p07_2()로 이동");
+        JButton b4 = new JButton("[상세]");
 
         f.add(b0);
         f.add(b1);
@@ -862,7 +865,16 @@ public class UI {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p07_2();
+                //상품 상세(R) 구현
+                String tmp = selectRowNo;
+                ProductDao productDao = new ProductDao();
+                ProductDto rsDto = productDao.selectOne(tmp);
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
+                else {
+                    JOptionPane.showMessageDialog(f, rsDto);
+                    p07_2();
+                }
             }
         }); //b3.addActionListener
 
@@ -1213,14 +1225,19 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String presetNum = JOptionPane.showInputDialog("적용하실 필터를 입력해 주세요 예)PR1");
+//                String presetNum = JOptionPane.showInputDialog("적용하실 필터를 입력해 주세요 예)PR1");
+                String presetNum = selectRowNo;
                 PresetDao presetDao = new PresetDao();
                 PresetDto rsDto = presetDao.selectOne(presetNum);
 
-                JOptionPane.showMessageDialog(f, "선택하신 필터의 내용입니다." + rsDto);
-                if (rsDto == null) JOptionPane.showMessageDialog(f, presetNum + " 필터 조건을 불러오는데 실패하였습니다");
 
-                p07_1();
+                if (rsDto == null) JOptionPane.showMessageDialog(f, presetNum + " 필터 조건을 불러오는데 실패하였습니다");
+                else {
+                    JOptionPane.showMessageDialog(f, "선택하신 필터의 내용입니다." + rsDto);
+                    p07_1();
+                }
+
+
             }
         }); //b1.addActionListener
 
@@ -1249,6 +1266,7 @@ public class UI {
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
         f.add(l1);
+
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
         JButton b1 = new JButton("필터 적용해제: p06()로 이동");
@@ -1259,25 +1277,57 @@ public class UI {
         JTextField t1 = new JTextField(20); // 10은 글자수
         JButton b11 = new JButton("검색");
 
+        // JTable
+        p.removeAll();
+        ProductDao dao = new ProductDao();
+        ArrayList<ProductDto> list = dao.selectListByPreset(selectRowNo);
+        selectRowNoTmp = selectRowNo;
+        String[] header = {"차량고유번호", "차종", "상품가격", "상세"};
+        model = new DefaultTableModel(data, header);
+        table = new JTable(model);
+        model.setRowCount(0); // 기존 테이블 모델의 행 제거
+        for (int i=0; i<list.size(); i++) {
+            model.addRow(new Object[]{
+                    list.get(i).getProductNum(),
+                    dao.getCarDto(list.get(i)).getCarName(),
+                    list.get(i).getProductPrice(),
+                    "상세"
+            });
+        }
+        final JScrollPane[] scroll = new JScrollPane[1];
+        scroll[0] = new JScrollPane(table);
+        scroll[0].setPreferredSize(new Dimension(320, 320));
+        f.add(p, BorderLayout.CENTER);
+        p.add(scroll[0]);
+        table.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e ) {
+                int row = table.getSelectedRow(); //행
+                selectRowNo = (String)table.getValueAt(row, 0); //열
+            }
+        });
+
         //
         JButton b2 = new JButton("필터 등록: p06_1()로 이동");
         JButton b3 = new JButton("필터 수정/삭제: p06_2()로 이동");
-        JButton b4 = new JButton("PR1 필터 정보 불러오기");
+
+        JButton b4 = new JButton("[상세]");
 
         f.add(b0);
         f.add(b1);
         f.add(combo1);
         f.add(t1);
         f.add(b11);
+
         f.add(b2);
         f.add(b3);
+        f.add(p, BorderLayout.CENTER);
         f.add(b4);
-
 
         b0.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p07();
+                p03();
             }
         }); //b0.addActionListener
 
@@ -1287,6 +1337,30 @@ public class UI {
                 p06();
             }
         }); //b1.addActionListener
+
+        b11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                ProductDao productDao = new ProductDao();
+                ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
+                model.setRowCount(0); // 기존 테이블 모델의 행 제거
+                if(list.isEmpty()) JOptionPane.showMessageDialog(f, "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]");
+                else {
+                    //검색결과 테이블에
+                    for (int i=0; i<list.size(); i++) {
+                        model.addRow(new Object[]{
+                                list.get(i).getProductNum(),
+                                dao.getCarDto(list.get(i)).getCarName(),
+                                list.get(i).getProductPrice(),
+                                "상세"
+                        });
+                    }
+                } //if~else
+
+            }
+        }); //b11.addActionListener
 
         b2.addActionListener(new ActionListener() {
             @Override
@@ -1305,27 +1379,19 @@ public class UI {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String tmp = "PR1";
-                PresetDao presetDao = new PresetDao();
-                PresetDto rsDto = presetDao.selectOne(tmp);
-                //rsDto를 다시 DAO를 통해 DB로보냄.
-                if (rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
-                else JOptionPane.showMessageDialog(f, rsDto);
-
-            }
-        }); //b4.addActionListener
-
-        b11.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = t1.getText();
-                String criteria = combo1.getSelectedItem().toString();
+                //상품 상세(R) 구현
+                String tmp = selectRowNo;
                 ProductDao productDao = new ProductDao();
-                ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
-                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]" + list));
+                ProductDto rsDto = productDao.selectOne(tmp);
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
+                else {
+                    prev = 1;
+                    JOptionPane.showMessageDialog(f, rsDto);
+                    p07_2();
+                }
             }
-        });
-
+        }); //b3.addActionListener
 
         /////////////////////////////////////////////////////////
 
@@ -1335,7 +1401,6 @@ public class UI {
     } // p07_1() : 필터활성화 후 상품조회
 
     public void p07_2() {
-
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1348,69 +1413,54 @@ public class UI {
         FlowLayout flow = new FlowLayout();
         f.setLayout(flow);
 
-
         //페이지제목
         JLabel l1 = new JLabel("p07_2 : 상품 정보 제공");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
         f.add(l1);
 
-
-        ImageIcon ic = new ImageIcon("img/img001.png"); // 예시 이미지
-        JLabel img = new JLabel(ic);
-        f.add(img);
-
-
-        String[] g1 = {"차량고유번호", "차량이름", "차량유형"};
-        JComboBox combo1 = new JComboBox(g1);
-        JTextField t1 = new JTextField(20); // 10은 글자수
-        JButton b11 = new JButton("상세정보 조회");
-
-        p.removeAll();
-        CarDao dao = new CarDao();
-        ArrayList<CarDto> list = dao.selectListAll();
-        String[] header = {"차량고유번호", "차량이름", "차량유형"};
-        model = new DefaultTableModel(data, header);
-        table = new JTable(model);
-        model.setRowCount(0); // 기존 테이블 모델의 행 제거
-        for (int i = 0; i < list.size(); i++) {
-            model.addRow(new Object[]{
-                    list.get(i).getCarNum(),
-                    list.get(i).getCarName(),
-                    list.get(i).getCarCategory(),
-                    "상세"
-            });
-        }
-        final JScrollPane[] scroll = new JScrollPane[1];
-        scroll[0] = new JScrollPane(table);
-        scroll[0].setPreferredSize(new Dimension(320, 320));
-        f.add(p, BorderLayout.CENTER);
-        p.add(scroll[0]);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int row = table.getSelectedRow(); //행
-                selectRowNo = (String) table.getValueAt(row, 0); //열
-            }
-        });
-
-
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
+        //p07_1()의 selectRowNo와 연계부분
+        ProductDao productDao = new ProductDao();
+        ProductDto productDto = productDao.selectOne(selectRowNo);
+        CarDto carDto = productDao.getCarDto(productDto);
+
+        System.out.println(carDto.getCarImageAddress());
+        ImageIcon ic = new ImageIcon("img/" + carDto.getCarImageAddress()); // 예시 이미지
+        JLabel img = new JLabel(ic);
+
+
+        JLabel l2 = new JLabel("차종 " + carDto.getCarName());
+        JLabel l3 = new JLabel("차종분류 " + carDto.getCarCategory());
+        JLabel l4 = new JLabel("차종특징 " + carDto.getCarFeature());
+        JLabel l5 = new JLabel("차량상태 " + productDto.getProductAvailable());
+        JLabel l6 = new JLabel("상품금액 " + productDto.getProductPrice());
+
         JButton b1 = new JButton("결제 후 이용: p08() 이동");
 
-
         f.add(b0);
+        f.add(img);
+        f.add(l2);
+        f.add(l3);
+        f.add(l4);
+        f.add(l5);
+        f.add(l6);
+
         f.add(b1);
-        f.add(b11);
-        f.add(t1);
-        f.add(combo1);
 
         b0.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                p07_1();
+                if(prev == 1) {
+                    selectRowNo = selectRowNoTmp;
+                    p07_1();
+                }
+                else{
+                    p06();
+                }
+
             }
         }); //b0.addActionListener
 
@@ -1421,21 +1471,110 @@ public class UI {
             }
         }); //b1.addActionListener
 
-        b11.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String keyword = t1.getText();
-                String criteria = combo1.getSelectedItem().toString();
-                CarDao carDao = new CarDao();
-                ArrayList<CarDto> li = carDao.selectList(criteria, keyword);
-                JOptionPane.showMessageDialog(f, li.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]" + li));
-            }
-        });
-
         /////////////////////////////////////////////////////////
         //JFrame Visible처리
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
+//        //JFrame 정의
+////        f = new JFrame();
+//        f.getContentPane().removeAll();
+//        f.repaint();
+//        f.setSize(400, 600);
+//        f.setTitle("첫화면");
+//        f.getContentPane().setBackground(Color.CYAN);
+//
+//        // FlowLayout ?
+//        FlowLayout flow = new FlowLayout();
+//        f.setLayout(flow);
+//
+//
+//        //페이지제목
+//        JLabel l1 = new JLabel("p07_2 : 상품 정보 제공");
+//        Font font = new Font("맑은 고딕", Font.BOLD, 30);
+//        l1.setFont(font);
+//        f.add(l1);
+//
+//
+//        ImageIcon ic = new ImageIcon("img/img001.png"); // 예시 이미지
+//        JLabel img = new JLabel(ic);
+//        f.add(img);
+//
+//
+//        String[] g1 = {"차량고유번호", "차량이름", "차량유형"};
+//        JComboBox combo1 = new JComboBox(g1);
+//        JTextField t1 = new JTextField(20); // 10은 글자수
+//        JButton b11 = new JButton("상세정보 조회");
+//
+//        p.removeAll();
+//        CarDao dao = new CarDao();
+//        ArrayList<CarDto> list = dao.selectListAll();
+//        String[] header = {"차량고유번호", "차량이름", "차량유형"};
+//        model = new DefaultTableModel(data, header);
+//        table = new JTable(model);
+//        model.setRowCount(0); // 기존 테이블 모델의 행 제거
+//        for (int i = 0; i < list.size(); i++) {
+//            model.addRow(new Object[]{
+//                    list.get(i).getCarNum(),
+//                    list.get(i).getCarName(),
+//                    list.get(i).getCarCategory(),
+//                    "상세"
+//            });
+//        }
+//        final JScrollPane[] scroll = new JScrollPane[1];
+//        scroll[0] = new JScrollPane(table);
+//        scroll[0].setPreferredSize(new Dimension(320, 320));
+//        f.add(p, BorderLayout.CENTER);
+//        p.add(scroll[0]);
+//        table.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                int row = table.getSelectedRow(); //행
+//                selectRowNo = (String) table.getValueAt(row, 0); //열
+//            }
+//        });
+//
+//
+//        /////////////////////////////////////////////////////////
+//        JButton b0 = new JButton("<-뒤로가기");
+//        JButton b1 = new JButton("결제 후 이용: p08() 이동");
+//
+//
+//        f.add(b0);
+//        f.add(b1);
+//        f.add(b11);
+//        f.add(t1);
+//        f.add(combo1);
+//
+//        b0.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//                p07_1();
+//            }
+//        }); //b0.addActionListener
+//
+//        b1.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                p08();
+//            }
+//        }); //b1.addActionListener
+//
+//        b11.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String keyword = t1.getText();
+//                String criteria = combo1.getSelectedItem().toString();
+//                CarDao carDao = new CarDao();
+//                ArrayList<CarDto> li = carDao.selectList(criteria, keyword);
+//                JOptionPane.showMessageDialog(f, li.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]" + li));
+//            }
+//        });
+//
+//        /////////////////////////////////////////////////////////
+//        //JFrame Visible처리
+//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        f.setVisible(true);
     } // p07_2() : 상품정보제공
 
     public void p08() {
