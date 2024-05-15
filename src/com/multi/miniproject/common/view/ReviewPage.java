@@ -128,7 +128,6 @@ public class ReviewPage extends UI{
                     p05_2();
 //                    System.out.println(selectRowNo);
                 }
-
             }
         }); //b1.addActionListener
 
@@ -188,7 +187,7 @@ public class ReviewPage extends UI{
         f.setLayout(flow);
 
         //페이지제목
-        JLabel l1 = new JLabel("p05_1 : 리뷰 작성");
+        JLabel l1 = new JLabel("p05_1 : 리뷰 작성  ");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
         f.add(l1);
@@ -211,7 +210,7 @@ public class ReviewPage extends UI{
 
         String[] g2 = {"5", "4", "3", "2", "1"};
         JComboBox combo2 = new JComboBox(g2);
-        JTextField t3 = new JTextField(50); // 10은 글자수
+        JTextField t3 = new JTextField(30); // 10은 글자수
         t3.setText("내용을 입력해주세요.");
 
         JButton b1 = new JButton("리뷰 등록");

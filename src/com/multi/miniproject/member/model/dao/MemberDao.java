@@ -192,7 +192,7 @@ public class MemberDao {
                 rsDto.setEmailSite(rs.getString("EMAIL_SITE"));
                 rsDto.setEmail();// 제거예정
                 rsDto.setAdmin(rs.getInt("ADMIN"));
-                System.out.println(rsDto);
+//                System.out.println(rsDto);
             }
 
         } catch (SQLException e) {
