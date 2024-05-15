@@ -194,4 +194,32 @@ public class CarDao {
         }
         return rsDtoList;
     }
+
+    public ArrayList<CarDto> selectListAll() {
+        ArrayList<CarDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM CARS";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                CarDto carDto = new CarDto();
+                carDto.setCarNum(rs.getString("CAR_NUM"));
+                carDto.setCarName(rs.getString("CAR_NAME"));
+                carDto.setCarCategory(rs.getString("CAR_CATEGORY"));
+
+
+                rsDtoList.add(carDto);
+            }
+        } catch(SQLException e) {
+            System.out.println("selectList(Car)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+
+        return rsDtoList;
+    } //selectListAll(car)
 }
