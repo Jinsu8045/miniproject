@@ -247,7 +247,8 @@ public class AdminPage extends UI {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p06_1();
+                new ProductPage().p06_1();
+                f.setVisible(false);
             }
         }); //b2.addActionListener
 
