@@ -112,7 +112,7 @@ public class UI {
         JTextField t5 = new JTextField(15); // 10은 글자수
         JLabel l6 = new JLabel("이메일");
         JTextField t6 = new JTextField(10); // 10은 글자수
-        JTextField t7 = new JTextField(10); // 10은 글자수 //'직접입력'일시 잠금해제 하는 기능 구현 필요.
+        JTextField t7 = new JTextField(10); // 10은 글자수
 
         //combobox2: 이메일 도메인
         String[] g2 = {"@naver.com", "@gmail.com", "직접입력"};

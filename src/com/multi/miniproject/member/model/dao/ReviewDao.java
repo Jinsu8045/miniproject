@@ -209,7 +209,7 @@ public class ReviewDao {
                 reviewDto.setTitle(rs.getString("TITLE"));
                 reviewDto.setCar_num(rs.getString("CAR_NUM"));
                 reviewDto.setWriter(rs.getString("WRITER"));
-                System.out.println(reviewDto);
+//                System.out.println(reviewDto);
 
                 rsDtoList.add(reviewDto);
             }
@@ -230,7 +230,7 @@ public class ReviewDao {
         ReviewDto rsDto = null;
 
         try {
-            String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL";
+            String sql = "SELECT * FROM V_REVIEW_TABLE WHERE REVIEW_NUM IS NOT NULL ORDER BY REVIEW_NUM DESC";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
