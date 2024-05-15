@@ -296,10 +296,7 @@ public class ReviewDao {
             dbcp.freeConnection(con, ps);
         }
 
-
         return result;
-
-
 
     }
 
