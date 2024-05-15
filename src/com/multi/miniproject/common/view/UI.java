@@ -932,24 +932,24 @@ public class UI {
         f.add(l1);
 /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
-        JLabel l2 = new JLabel("관리하실 필터를 선택해 주세요.");
+        JLabel l2 = new JLabel("수정/삭제 버튼을 클릭하세요 .");
         //radio
-        ButtonGroup g1 = new ButtonGroup();
-        JRadioButton r1 = new JRadioButton("1번 필터");
-        JRadioButton r2 = new JRadioButton("2번 필터");
-        JRadioButton r3 = new JRadioButton("3번 필터");
+//        ButtonGroup g1 = new ButtonGroup();
+//        JRadioButton r1 = new JRadioButton("1번 필터");
+//        JRadioButton r2 = new JRadioButton("2번 필터");
+//        JRadioButton r3 = new JRadioButton("3번 필터");
 
-        JButton b1 = new JButton("수정: p06_1()로 이동");
+        JButton b1 = new JButton("수정버튼 1=예/ 0=아니오");
         JButton b2 = new JButton("삭제: p06()로 이동");
 
         f.add(b0);
         f.add(l2);
-        g1.add(r1);
-        g1.add(r2);
-        g1.add(r3);
-        f.add(r1);
-        f.add(r2);
-        f.add(r3);
+//        g1.add(r1);
+//        g1.add(r2);
+//        g1.add(r3);
+//        f.add(r1);
+//        f.add(r2);
+//        f.add(r3);
 
         f.add(b1);
         f.add(b2);
@@ -970,8 +970,8 @@ public class UI {
 
                 //
                 presetDto = presetDao.selectOne(presetNum);
-                presetDto.setPresetComfort(Integer.parseInt(JOptionPane.showInputDialog(null, "승차감 편함/보통", presetDto.getPresetComfort())));
-                presetDto.setPresetWeight(Integer.parseInt(JOptionPane.showInputDialog(null, "적재량 많음/적음", presetDto.getPresetWeight())));
+                presetDto.setPresetComfort(Integer.parseInt(JOptionPane.showInputDialog(null, "승차감 편함  / 보통 ", presetDto.getPresetComfort())));
+                presetDto.setPresetWeight(Integer.parseInt(JOptionPane.showInputDialog(null, "적재량 많음 / 적음 ", presetDto.getPresetWeight())));
                 presetDto.setPresetPassenger(Integer.parseInt(JOptionPane.showInputDialog(null, "승객3인 이상 O/X", presetDto.getPresetPassenger())));
 
 
@@ -1036,30 +1036,30 @@ public class UI {
         JButton b0 = new JButton("<-뒤로가기");
         JLabel l2 = new JLabel("사용할 필터를 선택해 주세요");
         //radio
-        ButtonGroup g1 = new ButtonGroup();
-        JRadioButton r1 = new JRadioButton("1번 필터");
-        JRadioButton r2 = new JRadioButton("2번 필터");
-        JRadioButton r3 = new JRadioButton("3번 필터");
-
-        JLabel l3 = new JLabel("선택하신 필터의 조건입니다.");
-        JLabel l4 = new JLabel("/ 승차감 l4.setText()");
-        JLabel l5 = new JLabel("/ 적재량 l5.setText()");
-        JLabel l6 = new JLabel("/ 탑승인원 l6.setText()");
+//        ButtonGroup g1 = new ButtonGroup();
+//        JRadioButton r1 = new JRadioButton("1번 필터");
+//        JRadioButton r2 = new JRadioButton("2번 필터");
+//        JRadioButton r3 = new JRadioButton("3번 필터");
+        // 라디오 버튼을 비활성화
+        JLabel l3 = new JLabel("선택 버튼 클릭 후 적용할 필터를 입력해주세요");
+//        JLabel l4 = new JLabel("/ 승차감 l4.setText()");
+//        JLabel l5 = new JLabel("/ 적재량 l5.setText()");
+//        JLabel l6 = new JLabel("/ 탑승인원 l6.setText()");
 
         JButton b1 = new JButton("선택: p07_1()로 이동");
 
         f.add(b0);
         f.add(l2);
-        g1.add(r1);
-        g1.add(r2);
-        g1.add(r3);
-        f.add(r1);
-        f.add(r2);
-        f.add(r3);
+//        g1.add(r1);
+//        g1.add(r2);
+//        g1.add(r3);
+//        f.add(r1);
+//        f.add(r2);
+//        f.add(r3);
         f.add(l3);
-        f.add(l4);
-        f.add(l5);
-        f.add(l6);
+//        f.add(l4);
+//        f.add(l5);
+//        f.add(l6);
 
         f.add(b1);
 
@@ -1074,9 +1074,11 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String presetNum = JOptionPane.showInputDialog("적용하실 필터를 입력해 주세요");
+                String presetNum = JOptionPane.showInputDialog("적용하실 필터를 입력해 주세요 예)PR1");
                 PresetDao presetDao = new PresetDao();
                 PresetDto rsDto = presetDao.selectOne(presetNum);
+
+                JOptionPane.showMessageDialog(f,"선택하신 필터의 내용입니다." + rsDto);
                 if (rsDto == null) JOptionPane.showMessageDialog(f, presetNum + " 필터 조건을 불러오는데 실패하였습니다");
 
                 p07_1();
@@ -1113,7 +1115,7 @@ public class UI {
         JButton b1 = new JButton("필터 적용해제: p06()로 이동");
         // 검색버튼 구현
         //combobox
-        String[] g1 = {"차종", "차종분류", "취향"};
+        String[] g1 = {"차종", "차량가격", "주문가능여부"};
         JComboBox combo1 = new JComboBox(g1);
         JTextField t1 = new JTextField(20); // 10은 글자수
         JButton b11 = new JButton("검색");
@@ -1121,7 +1123,7 @@ public class UI {
         //
         JButton b2 = new JButton("필터 등록: p06_1()로 이동");
         JButton b3 = new JButton("필터 수정/삭제: p06_2()로 이동");
-        JButton b4 = new JButton("GV80 상세: p07_2()로 이동");
+        JButton b4 = new JButton("PR1 필터 정보 불러오기");
 
         f.add(b0);
         f.add(b1);
@@ -1164,9 +1166,26 @@ public class UI {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p07_2();
+                String tmp = "PR1";
+                PresetDao presetDao = new PresetDao();
+                PresetDto rsDto = presetDao.selectOne(tmp);
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
+                else JOptionPane.showMessageDialog(f, rsDto);
+
             }
         }); //b4.addActionListener
+
+        b11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                ProductDao productDao = new ProductDao();
+                ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
+            }
+        });
 
 
         /////////////////////////////////////////////////////////
@@ -1176,7 +1195,8 @@ public class UI {
         f.setVisible(true);
     } // p07_1() : 필터활성화 후 상품조회
 
-    public void p07_2() {
+    public void p07_2(){
+
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1189,39 +1209,42 @@ public class UI {
         FlowLayout flow = new FlowLayout();
         f.setLayout(flow);
 
+
+
         //페이지제목
         JLabel l1 = new JLabel("p07_2 : 상품 정보 제공");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
         f.add(l1);
 
+
+        ImageIcon ic = new ImageIcon("img/img001.png"); // 예시 이미지
+        JLabel img = new JLabel(ic);
+        f.add(img);
+
+
+        String[] g1 = {"차량고유번호", "차량이름", "차량유형"};
+        JComboBox combo1 = new JComboBox(g1);
+        JTextField t1 = new JTextField(20); // 10은 글자수
+        JButton b11 = new JButton("상세정보 조회");
+
+
+
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
-        //이미지
-        JLabel img1 = new JLabel("이미지");
-//        img1.setIcon(new ImageIcon("images/img.jpg"));
-        //
-        JLabel l2 = new JLabel("차종 l2.setText()");
-        JLabel l3 = new JLabel("/ 차종분류 l3.setText()");
-        JLabel l4 = new JLabel("/ 차종특징 l4.setText()");
-        JLabel l5 = new JLabel("/ 차량상태 l5.setText()");
-        JLabel l6 = new JLabel("/ 상품금액 l6.setText()");
-
         JButton b1 = new JButton("결제 후 이용: p08() 이동");
 
-        f.add(b0);
-        f.add(img1);
-        f.add(l2);
-        f.add(l3);
-        f.add(l4);
-        f.add(l5);
-        f.add(l6);
 
+        f.add(b0);
         f.add(b1);
+        f.add(b11);
+        f.add(t1);
+        f.add(combo1);
 
         b0.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 p07_1();
             }
         }); //b0.addActionListener
@@ -1232,6 +1255,17 @@ public class UI {
                 p08();
             }
         }); //b1.addActionListener
+
+        b11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                CarDao carDao = new CarDao();
+                ArrayList<CarDto> li = carDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, li.isEmpty()? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]" + li));
+            }
+        });
 
         /////////////////////////////////////////////////////////
         //JFrame Visible처리
