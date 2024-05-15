@@ -1313,7 +1313,7 @@ public class UI {
         JButton b1 = new JButton("필터 적용해제: p06()로 이동");
         // 검색버튼 구현
         //combobox
-        String[] g1 = {"차종", "차종분류", "취향"};
+        String[] g1 = {"차종", "차량가격", "주문가능여부"};
         JComboBox combo1 = new JComboBox(g1);
         JTextField t1 = new JTextField(20); // 10은 글자수
         JButton b11 = new JButton("검색");
@@ -1374,6 +1374,17 @@ public class UI {
             }
         }); //b4.addActionListener
 
+        b11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                ProductDao productDao = new ProductDao();
+                ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
+            }
+        });
+
 
         /////////////////////////////////////////////////////////
 
@@ -1382,7 +1393,8 @@ public class UI {
         f.setVisible(true);
     } // p07_1() : 필터활성화 후 상품조회
 
-    public void p07_2() {
+    public void p07_2(){
+
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1395,39 +1407,42 @@ public class UI {
         FlowLayout flow = new FlowLayout();
         f.setLayout(flow);
 
+
+
         //페이지제목
         JLabel l1 = new JLabel("p07_2 : 상품 정보 제공");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
         f.add(l1);
 
+
+        ImageIcon ic = new ImageIcon("img/img001.png"); // 예시 이미지
+        JLabel img = new JLabel(ic);
+        f.add(img);
+
+
+        String[] g1 = {"차량고유번호", "차량이름", "차량유형"};
+        JComboBox combo1 = new JComboBox(g1);
+        JTextField t1 = new JTextField(20); // 10은 글자수
+        JButton b11 = new JButton("상세정보 조회");
+
+
+
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
-        //이미지
-        JLabel img1 = new JLabel("이미지");
-//        img1.setIcon(new ImageIcon("images/img.jpg"));
-        //
-        JLabel l2 = new JLabel("차종 l2.setText()");
-        JLabel l3 = new JLabel("/ 차종분류 l3.setText()");
-        JLabel l4 = new JLabel("/ 차종특징 l4.setText()");
-        JLabel l5 = new JLabel("/ 차량상태 l5.setText()");
-        JLabel l6 = new JLabel("/ 상품금액 l6.setText()");
-
         JButton b1 = new JButton("결제 후 이용: p08() 이동");
 
-        f.add(b0);
-        f.add(img1);
-        f.add(l2);
-        f.add(l3);
-        f.add(l4);
-        f.add(l5);
-        f.add(l6);
 
+        f.add(b0);
         f.add(b1);
+        f.add(b11);
+        f.add(t1);
+        f.add(combo1);
 
         b0.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 p07_1();
             }
         }); //b0.addActionListener
@@ -1438,6 +1453,17 @@ public class UI {
                 p08();
             }
         }); //b1.addActionListener
+
+        b11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                CarDao carDao = new CarDao();
+                ArrayList<CarDto> li = carDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, li.isEmpty()? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]" + li));
+            }
+        });
 
         /////////////////////////////////////////////////////////
         //JFrame Visible처리
