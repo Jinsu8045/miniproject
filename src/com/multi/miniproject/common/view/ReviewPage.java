@@ -97,7 +97,7 @@ public class ReviewPage extends UI{
                 int row = table.getSelectedRow(); // 클릭된 행의 인덱스
                 selectRowNo = (String) table.getValueAt(row, 0); // 클릭된 행의 no 열의 값
 
-                System.out.println("선택된 행의 no 값: " + selectRowNo);
+//                System.out.println("선택된 행의 no 값: " + selectRowNo);
             }
         });
 
@@ -126,7 +126,7 @@ public class ReviewPage extends UI{
                     JOptionPane.showMessageDialog(f,"선택된 값이 없습니다.");
                 }else{
                     p05_2();
-                    System.out.println(selectRowNo);
+//                    System.out.println(selectRowNo);
                 }
 
             }
@@ -201,8 +201,7 @@ public class ReviewPage extends UI{
         JComboBox combo1 = new JComboBox();
         ArrayList<ReviewDto> yetreviewlist = dao.userReviewlist(mDao.loginUser(loginUser).getId());
         if(yetreviewlist.isEmpty()) {
-            String[] g1 = {"주문이력이 없음"};
-            combo1.addItem(g1);
+            combo1.addItem("주문이력이 없음");
 
         }else{
             for (ReviewDto review : yetreviewlist) {
@@ -241,8 +240,6 @@ public class ReviewPage extends UI{
 
                 int rating = Integer.parseInt(combo2.getSelectedItem().toString());
                 String selectOrder = combo1.getSelectedItem().toString();
-                String orderNum = dao.userReviewlist(mDao.loginUser(loginUser).getId(),selectOrder).getOrderNum();
-                //같은 차종이 여러개일 경우 먼저 order된 순서로 작성
                 String title = t2.getText();
                 String contents = t3.getText();
 
@@ -253,6 +250,8 @@ public class ReviewPage extends UI{
                 }else if(selectOrder.equals("주문이력이 없음")) {
                     JOptionPane.showMessageDialog(f, "작성 할 수 있는 리뷰가 없습니다.");
                 }else {
+                    String orderNum = dao.userReviewlist(mDao.loginUser(loginUser).getId(),selectOrder).getOrderNum();
+                    //같은 차종이 여러개일 경우 먼저 order된 순서로 작성
                     int result = dao.reviewInsert(orderNum, rating, title, contents);
                     if (result == 1) {
                         JOptionPane.showMessageDialog(f, "리뷰가 등록되었습니다.");
@@ -298,7 +297,8 @@ public class ReviewPage extends UI{
 //        String[] g1 = {"주문이력이 없음", "기타"};
 //        JComboBox combo1 = new JComboBox(g1);
         JTextField t4 = new JTextField(5); // 10은 글자수
-        t4.setText(dao.reviewDetail(selectRowNo).getCar_num()); //수정 못하게 막기
+        t4.setText(dao.reviewDetail(selectRowNo).getCar_num());
+        t4.setEditable(false);//수정 못하게 막기
         String[] g2 = {"5", "4", "3", "2", "1"};
         JComboBox combo2 = new JComboBox(g2);
         combo2.setSelectedItem(String.valueOf(dao.reviewDetail(selectRowNo).getRating()));

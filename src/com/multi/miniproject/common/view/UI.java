@@ -84,7 +84,7 @@ public class UI {
         f.setLayout(flow);
 
         //페이지제목
-        JLabel l1 = new JLabel("p01_1 : 회원가입 페이지");
+        JLabel l1 = new JLabel("p01_1 : 회원가입  ");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
         f.add(l1);
@@ -92,18 +92,18 @@ public class UI {
         JButton b0 = new JButton("<-뒤로가기");
 
         JLabel l2 = new JLabel("아이디");
-        JTextField t2 = new JTextField(19); //
+        JTextField t2 = new JTextField(20); //
         JButton b1 = new JButton("중복확인");
 
         JLabel l3 = new JLabel("비밀번호");
-        JTextField t3 = new JTextField(30); // 10은 글자수
+        JTextField t3 = new JTextField(25); // 10은 글자수
         JLabel l4 = new JLabel("비밀번호 확인");
-        JTextField t4 = new JTextField(30); // 10은 글자수
+        JTextField t4 = new JTextField(25); // 10은 글자수
         JLabel l5 = new JLabel("이름");
-        JTextField t5 = new JTextField(10); // 10은 글자수
+        JTextField t5 = new JTextField(15); // 10은 글자수
         JLabel l6 = new JLabel("이메일");
-        JTextField t6 = new JTextField(15); // 10은 글자수
-        JTextField t7 = new JTextField(15); // 10은 글자수 //'직접입력'일시 잠금해제 하는 기능 구현 필요.
+        JTextField t6 = new JTextField(10); // 10은 글자수
+        JTextField t7 = new JTextField(10); // 10은 글자수 //'직접입력'일시 잠금해제 하는 기능 구현 필요.
 
         //combobox2: 이메일 도메인
         String[] g2 = {"@naver.com", "@gmail.com", "직접입력"};
@@ -128,6 +128,7 @@ public class UI {
         f.add(combo2);
 
         f.add(b2);
+
 
         b0.addActionListener(new ActionListener() {
             @Override
@@ -167,13 +168,15 @@ public class UI {
                 if (selectedValue.equals("직접입력")) {
                     emailSite = t7.getText();
                 } else {
+                    t7.setText("");
                     emailSite = selectedValue;
                 }
 
                 MemberDao memberDao = new MemberDao();
                 boolean startsWithAt = emailSite.startsWith("@");
-
-                if (pw.equals(pw2) && memberDao.idCheck(id) == false && startsWithAt == true) {
+                if(id.equals("")||pw.equals("")||name.equals("")||emailID.equals("")){
+                    JOptionPane.showMessageDialog(f, "입력되지 않은 값이 존재합니다.");
+                }else if (pw.equals(pw2) && memberDao.idCheck(id) == false && startsWithAt == true) {
                     MemberDto memberDto = new MemberDto(id, pw, name, emailID, emailSite);
                     int result = memberDao.joinMember(memberDto);
                     if (result == 1) {
@@ -223,9 +226,9 @@ public class UI {
         JButton b0 = new JButton("<-뒤로가기");
 
         JLabel l2 = new JLabel("아이디");
-        JTextField t2 = new JTextField(19); //
+        JTextField t2 = new JTextField(10); //
         JLabel l3 = new JLabel("비밀번호");
-        JTextField t3 = new JTextField(30); // 10은 글자수
+        JTextField t3 = new JTextField(10); // 10은 글자수
 
         JButton b1 = new JButton("로그인: p03()으로 이동");
         JButton b2 = new JButton("비밀번호 찾기");
@@ -354,6 +357,7 @@ public class UI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 p02();
+                loginUser = null;
             }
         }); //b0.addActionListener
 
@@ -384,7 +388,8 @@ public class UI {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p04();
+                Mypage mypage=new Mypage();
+                mypage.p04();
             }
         }); //b4.addActionListener
 
@@ -395,322 +400,322 @@ public class UI {
         f.setVisible(true);
     } //p03() : 메뉴
 
-    public void p04() {
-
-        MemberDao dao = new MemberDao();
-
-        //JFrame 정의
-//        f = new JFrame();
-        f.getContentPane().removeAll();
-        f.repaint();
-        f.setSize(400, 600);
-        f.setTitle("첫화면");
-        f.getContentPane().setBackground(Color.YELLOW);
-
-        // FlowLayout ?
-        FlowLayout flow = new FlowLayout();
-        f.setLayout(flow);
-
-        //페이지제목
-        JLabel l1 = new JLabel("p04 : 마이페이지");
-        Font font = new Font("맑은 고딕", Font.BOLD, 30);
-        l1.setFont(font);
-        f.add(l1);
-
-        /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
-        JLabel l2 = new JLabel("이름 " + dao.loginUser(loginUser).getName());
-        JLabel l3 = new JLabel("아이디(이메일)" + dao.loginUser(loginUser).getId() +
-                "(" + dao.loginUser(loginUser).getEmail() + ")");
-        //이미지
-        JLabel img1 = new JLabel("이미지");
-//        img1.setIcon(new ImageIcon("images/img.jpg"));
-        //
-        JLabel l4 = new JLabel("//계정 관리");
-        JButton b1 = new JButton("프로필 재설정");
-        JButton b2 = new JButton("회원탈퇴");
-        JButton b3 = new JButton("로그아웃");
-
-        f.add(b0);
-        f.add(l2);
-        f.add(l3);
-        f.add(img1);
-        f.add(l4);
-        f.add(b1);
-        f.add(b2);
-        f.add(b3);
-
-        b0.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                p03();
-            }
-        }); //b0.addActionListener
-
-        b1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                p04_1();
-            }
-        }); //b1.addActionListener
-
-        b2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                p04_2();
-            }
-        }); //b2.addActionListener
-
-        b3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
-                loginUser = null;
-                p01();
-            }
-        }); //b3.addActionListener
-        /////////////////////////////////////////
-        //JFrame Visible처리
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    } //p04() : 마이페이지
-
-    public void p04_1() {
-
-        MemberDao dao = new MemberDao();
-
-        //JFrame 정의
-//        f = new JFrame();
-        f.getContentPane().removeAll();
-        f.repaint();
-        f.setSize(400, 600);
-        f.setTitle("첫화면");
-        f.getContentPane().setBackground(Color.YELLOW);
-
-        // FlowLayout ?
-        FlowLayout flow = new FlowLayout();
-        f.setLayout(flow);
-
-        //페이지제목
-        JLabel l1 = new JLabel("p04_1 : 프로필 재설정");
-        Font font = new Font("맑은 고딕", Font.BOLD, 30);
-        l1.setFont(font);
-        f.add(l1);
-
-        /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
-        JLabel l2 = new JLabel("아이디");
-        JLabel l21 = new JLabel(dao.loginUser(loginUser).getId()); //수정불가하므로
-        JLabel l3 = new JLabel("현재 비밀번호");
-        JTextField t3 = new JTextField(30); // 10은 글자수
-        JLabel l4 = new JLabel("변경 비밀번호");
-        JTextField t4 = new JTextField(30); // 10은 글자수
-        JLabel l5 = new JLabel("이름");
-        JTextField t5 = new JTextField(10); // 10은 글자수
-        t5.setText(dao.loginUser(loginUser).getName());
-        JLabel l6 = new JLabel("이메일");
-        JTextField t6 = new JTextField(15); // 10은 글자수
-        t6.setText(dao.loginUser(loginUser).getEmailID());
-        JTextField t7 = new JTextField(15);
-
-
-        //combobox2: 이메일 도메인
-        ArrayList<String> g2 = new ArrayList<>();
-        g2.add("@naver.com");
-        g2.add("@gmail.com");
-        g2.add("직접입력");
-        JComboBox<String> combo2 = new JComboBox<>(g2.toArray(new String[0]));
-
-
-        if (g2.contains(dao.loginUser(loginUser).getEmailSite())) {
-            // 작성불가/jbox 일치시키기
-        } else {
-            t7.setText(dao.loginUser(loginUser).getEmailSite());
-        }
-
-
-        JButton b1 = new JButton("수정");
-
-        f.add(b0);
-        f.add(l2);
-        f.add(l21);
-        f.add(l3);
-        f.add(t3);
-        f.add(l4);
-        f.add(t4);
-        f.add(l5);
-        f.add(t5);
-        f.add(l6);
-        f.add(t6);
-        f.add(t7);
-        f.add(combo2);
-        f.add(b1);
-
-        b0.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                p04();
-            }
-        }); //b0.addActionListener
-
-        b1.addActionListener(new ActionListener() { // 수정
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String pw = t3.getText();
-                String pwNew = t4.getText();
-                String name = t5.getText();
-                String emailID = t6.getText();
-                String emailSite;
-
-                String selectedValue = combo2.getSelectedItem().toString();
-                if (selectedValue.equals("직접입력")) {
-                    emailSite = t7.getText();
-                } else {
-                    emailSite = selectedValue;
-                }
-                if (dao.loginUser(loginUser).getPw().equals(pw)) {
-
-                    MemberDto memberDto = new MemberDto(l21.getText(), pwNew, name, emailID, emailSite);
-                    MemberDao memberDao = new MemberDao();
-                    int result = memberDao.updateUser(memberDto);
-
-                    if (result == 1) {
-                        JOptionPane.showMessageDialog(f, "수정되었습니다.");
-                        p04();
-                    } else {
-                        JOptionPane.showMessageDialog(f, "업데이트 실패. 다시 시도해주세요.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(f, "비밀번호가 올바르지 않습니다");
-                }
-
-            }
-        }); //b1.addActionListener
-        /////////////////////////////////////////
-
-        //JFrame Visible처리
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    } // p04_1() : 프로필 재설정
-
-    public void p04_2() {
-        //JFrame 정의
-//        f = new JFrame();
-
-        MemberDao dao = new MemberDao();
-
-        Random r = new Random();
-        StringBuilder rString = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            int digit = r.nextInt(16); // 0부터 15 사이의 난수 생성
-            rString.append(Integer.toHexString(digit)); // 16진수로 변환하여 추가
-        }
-
-
-        f.getContentPane().removeAll();
-        f.repaint();
-        f.setSize(400, 600);
-        f.setTitle("첫화면");
-        f.getContentPane().setBackground(Color.YELLOW);
-
-        // FlowLayout ?
-        FlowLayout flow = new FlowLayout();
-        f.setLayout(flow);
-
-        //페이지제목
-        JLabel l1 = new JLabel("p04_2 : 회원탈퇴");
-        Font font = new Font("맑은 고딕", Font.BOLD, 30);
-        l1.setFont(font);
-        f.add(l1);
-        /////////////////////////////////////////////////////////
-        JButton b0 = new JButton("<-뒤로가기");
-        JLabel l2 = new JLabel("아이디");
-        JLabel l21 = new JLabel(dao.loginUser(loginUser).getId()); //수정불가하므로
-        JLabel l3 = new JLabel("비밀번호");
-        JTextField t3 = new JTextField(30); // 10은 글자수
-        JLabel l4 = new JLabel("자동 입력방지");
-        JLabel l41 = new JLabel(String.format(rString.toString()));
-        JButton b1 = new JButton("새로고침");
-        JTextField t4 = new JTextField(10); // 10은 글자수
-
-        //checkbox 예제
-        JLabel l5 = new JLabel("주의");
-        JLabel l6 = new JLabel("탈퇴시 보유하고 있던 모든 혜택이 사라집니다. 이후 같은 아이디로 재가입이 불가합니다.");
-        JCheckBox cb1 = new JCheckBox("주의사항을 확인했으며 이에 동의합니다.");
-
-        JButton b2 = new JButton("탈퇴");
-
-        f.add(b0);
-        f.add(l2);
-        f.add(l21);
-        f.add(l3);
-        f.add(t3);
-        f.add(l4);
-        f.add(l41);
-        f.add(b1);
-        f.add(t4);
-        f.add(l5);
-        f.add(l6);
-        f.add(cb1);
-        f.add(b2);
-
-
-        b0.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                p04();
-            }
-        }); //b0.addActionListener
-
-        b1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Random r = new Random();
-                StringBuilder rString = new StringBuilder();
-                for (int i = 0; i < 6; i++) {
-                    int digit = r.nextInt(16); // 0부터 15 사이의 난수 생성
-                    rString.append(Integer.toHexString(digit)); // 16진수로 변환하여 추가
-                }
-
-                l41.setText(rString.toString());
-            }
-        }); //b1.addActionListener
-
-        b2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (cb1.isSelected()) {//checkbox 처리확인후
-                    String pw = t3.getText();
-                    String answerR = t4.getText();
-                    String rString = l41.getText();
-
-                    boolean pwMatch = dao.loginUser(loginUser).getPw().equals(pw);
-                    boolean rResult = answerR.equals(rString);
-
-                    if (pwMatch && rResult) {
-
-                        int result = dao.deleteMember(loginUser);
-                        if (result == 1) {
-
-                            JOptionPane.showMessageDialog(f, "탈퇴 처리 되었습니다. 메인화면으로 돌아갑니다.");
-                            p01();
-                        } else {
-                            JOptionPane.showMessageDialog(f, "처리 실패. 다시 시도해주세요.");
-                        }
-                    } else if (pwMatch == false) {
-                        JOptionPane.showMessageDialog(f, "비밀번호 오류. 다시 입력해주세요");
-                    } else {
-                        JOptionPane.showMessageDialog(f, "자동입력방지 값이 일치하지 않습니다.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(f, "주의사항을 다시 확인해주세요.");
-                }
-            }
-        }); //b2.addActionListener
-        //JFrame Visible처리
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setVisible(true);
-    } // p04_2() : 회원탈퇴
+//    public void p04() {
+//
+//        MemberDao dao = new MemberDao();
+//
+//        //JFrame 정의
+////        f = new JFrame();
+//        f.getContentPane().removeAll();
+//        f.repaint();
+//        f.setSize(400, 600);
+//        f.setTitle("첫화면");
+//        f.getContentPane().setBackground(Color.YELLOW);
+//
+//        // FlowLayout ?
+//        FlowLayout flow = new FlowLayout();
+//        f.setLayout(flow);
+//
+//        //페이지제목
+//        JLabel l1 = new JLabel("p04 : 마이페이지");
+//        Font font = new Font("맑은 고딕", Font.BOLD, 30);
+//        l1.setFont(font);
+//        f.add(l1);
+//
+//        /////////////////////////////////////////////////////////
+//        JButton b0 = new JButton("<-뒤로가기");
+//        JLabel l2 = new JLabel("이름 " + dao.loginUser(loginUser).getName());
+//        JLabel l3 = new JLabel("아이디(이메일)" + dao.loginUser(loginUser).getId() +
+//                "(" + dao.loginUser(loginUser).getEmail() + ")");
+//        //이미지
+//        JLabel img1 = new JLabel("이미지");
+////        img1.setIcon(new ImageIcon("images/img.jpg"));
+//        //
+//        JLabel l4 = new JLabel("//계정 관리");
+//        JButton b1 = new JButton("프로필 재설정");
+//        JButton b2 = new JButton("회원탈퇴");
+//        JButton b3 = new JButton("로그아웃");
+//
+//        f.add(b0);
+//        f.add(l2);
+//        f.add(l3);
+//        f.add(img1);
+//        f.add(l4);
+//        f.add(b1);
+//        f.add(b2);
+//        f.add(b3);
+//
+//        b0.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                p03();
+//            }
+//        }); //b0.addActionListener
+//
+//        b1.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                p04_1();
+//            }
+//        }); //b1.addActionListener
+//
+//        b2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                p04_2();
+//            }
+//        }); //b2.addActionListener
+//
+//        b3.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
+//                loginUser = null;
+//                p01();
+//            }
+//        }); //b3.addActionListener
+//        /////////////////////////////////////////
+//        //JFrame Visible처리
+//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        f.setVisible(true);
+//    } //p04() : 마이페이지
+//
+//    public void p04_1() {
+//
+//        MemberDao dao = new MemberDao();
+//
+//        //JFrame 정의
+////        f = new JFrame();
+//        f.getContentPane().removeAll();
+//        f.repaint();
+//        f.setSize(400, 600);
+//        f.setTitle("첫화면");
+//        f.getContentPane().setBackground(Color.YELLOW);
+//
+//        // FlowLayout ?
+//        FlowLayout flow = new FlowLayout();
+//        f.setLayout(flow);
+//
+//        //페이지제목
+//        JLabel l1 = new JLabel("p04_1 : 프로필 재설정");
+//        Font font = new Font("맑은 고딕", Font.BOLD, 30);
+//        l1.setFont(font);
+//        f.add(l1);
+//
+//        /////////////////////////////////////////////////////////
+//        JButton b0 = new JButton("<-뒤로가기");
+//        JLabel l2 = new JLabel("아이디");
+//        JLabel l21 = new JLabel(dao.loginUser(loginUser).getId()); //수정불가하므로
+//        JLabel l3 = new JLabel("현재 비밀번호");
+//        JTextField t3 = new JTextField(30); // 10은 글자수
+//        JLabel l4 = new JLabel("변경 비밀번호");
+//        JTextField t4 = new JTextField(30); // 10은 글자수
+//        JLabel l5 = new JLabel("이름");
+//        JTextField t5 = new JTextField(10); // 10은 글자수
+//        t5.setText(dao.loginUser(loginUser).getName());
+//        JLabel l6 = new JLabel("이메일");
+//        JTextField t6 = new JTextField(15); // 10은 글자수
+//        t6.setText(dao.loginUser(loginUser).getEmailID());
+//        JTextField t7 = new JTextField(15);
+//
+//
+//        //combobox2: 이메일 도메인
+//        ArrayList<String> g2 = new ArrayList<>();
+//        g2.add("@naver.com");
+//        g2.add("@gmail.com");
+//        g2.add("직접입력");
+//        JComboBox<String> combo2 = new JComboBox<>(g2.toArray(new String[0]));
+//
+//
+//        if (g2.contains(dao.loginUser(loginUser).getEmailSite())) {
+//            // 작성불가/jbox 일치시키기
+//        } else {
+//            t7.setText(dao.loginUser(loginUser).getEmailSite());
+//        }
+//
+//
+//        JButton b1 = new JButton("수정");
+//
+//        f.add(b0);
+//        f.add(l2);
+//        f.add(l21);
+//        f.add(l3);
+//        f.add(t3);
+//        f.add(l4);
+//        f.add(t4);
+//        f.add(l5);
+//        f.add(t5);
+//        f.add(l6);
+//        f.add(t6);
+//        f.add(t7);
+//        f.add(combo2);
+//        f.add(b1);
+//
+//        b0.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                p04();
+//            }
+//        }); //b0.addActionListener
+//
+//        b1.addActionListener(new ActionListener() { // 수정
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String pw = t3.getText();
+//                String pwNew = t4.getText();
+//                String name = t5.getText();
+//                String emailID = t6.getText();
+//                String emailSite;
+//
+//                String selectedValue = combo2.getSelectedItem().toString();
+//                if (selectedValue.equals("직접입력")) {
+//                    emailSite = t7.getText();
+//                } else {
+//                    emailSite = selectedValue;
+//                }
+//                if (dao.loginUser(loginUser).getPw().equals(pw)) {
+//
+//                    MemberDto memberDto = new MemberDto(l21.getText(), pwNew, name, emailID, emailSite);
+//                    MemberDao memberDao = new MemberDao();
+//                    int result = memberDao.updateUser(memberDto);
+//
+//                    if (result == 1) {
+//                        JOptionPane.showMessageDialog(f, "수정되었습니다.");
+//                        p04();
+//                    } else {
+//                        JOptionPane.showMessageDialog(f, "업데이트 실패. 다시 시도해주세요.");
+//                    }
+//                } else {
+//                    JOptionPane.showMessageDialog(f, "비밀번호가 올바르지 않습니다");
+//                }
+//
+//            }
+//        }); //b1.addActionListener
+//        /////////////////////////////////////////
+//
+//        //JFrame Visible처리
+//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        f.setVisible(true);
+//    } // p04_1() : 프로필 재설정
+//
+//    public void p04_2() {
+//        //JFrame 정의
+////        f = new JFrame();
+//
+//        MemberDao dao = new MemberDao();
+//
+//        Random r = new Random();
+//        StringBuilder rString = new StringBuilder();
+//        for (int i = 0; i < 6; i++) {
+//            int digit = r.nextInt(16); // 0부터 15 사이의 난수 생성
+//            rString.append(Integer.toHexString(digit)); // 16진수로 변환하여 추가
+//        }
+//
+//
+//        f.getContentPane().removeAll();
+//        f.repaint();
+//        f.setSize(400, 600);
+//        f.setTitle("첫화면");
+//        f.getContentPane().setBackground(Color.YELLOW);
+//
+//        // FlowLayout ?
+//        FlowLayout flow = new FlowLayout();
+//        f.setLayout(flow);
+//
+//        //페이지제목
+//        JLabel l1 = new JLabel("p04_2 : 회원탈퇴");
+//        Font font = new Font("맑은 고딕", Font.BOLD, 30);
+//        l1.setFont(font);
+//        f.add(l1);
+//        /////////////////////////////////////////////////////////
+//        JButton b0 = new JButton("<-뒤로가기");
+//        JLabel l2 = new JLabel("아이디");
+//        JLabel l21 = new JLabel(dao.loginUser(loginUser).getId()); //수정불가하므로
+//        JLabel l3 = new JLabel("비밀번호");
+//        JTextField t3 = new JTextField(30); // 10은 글자수
+//        JLabel l4 = new JLabel("자동 입력방지");
+//        JLabel l41 = new JLabel(String.format(rString.toString()));
+//        JButton b1 = new JButton("새로고침");
+//        JTextField t4 = new JTextField(10); // 10은 글자수
+//
+//        //checkbox 예제
+//        JLabel l5 = new JLabel("주의");
+//        JLabel l6 = new JLabel("탈퇴시 보유하고 있던 모든 혜택이 사라집니다. 이후 같은 아이디로 재가입이 불가합니다.");
+//        JCheckBox cb1 = new JCheckBox("주의사항을 확인했으며 이에 동의합니다.");
+//
+//        JButton b2 = new JButton("탈퇴");
+//
+//        f.add(b0);
+//        f.add(l2);
+//        f.add(l21);
+//        f.add(l3);
+//        f.add(t3);
+//        f.add(l4);
+//        f.add(l41);
+//        f.add(b1);
+//        f.add(t4);
+//        f.add(l5);
+//        f.add(l6);
+//        f.add(cb1);
+//        f.add(b2);
+//
+//
+//        b0.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                p04();
+//            }
+//        }); //b0.addActionListener
+//
+//        b1.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                Random r = new Random();
+//                StringBuilder rString = new StringBuilder();
+//                for (int i = 0; i < 6; i++) {
+//                    int digit = r.nextInt(16); // 0부터 15 사이의 난수 생성
+//                    rString.append(Integer.toHexString(digit)); // 16진수로 변환하여 추가
+//                }
+//
+//                l41.setText(rString.toString());
+//            }
+//        }); //b1.addActionListener
+//
+//        b2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (cb1.isSelected()) {//checkbox 처리확인후
+//                    String pw = t3.getText();
+//                    String answerR = t4.getText();
+//                    String rString = l41.getText();
+//
+//                    boolean pwMatch = dao.loginUser(loginUser).getPw().equals(pw);
+//                    boolean rResult = answerR.equals(rString);
+//
+//                    if (pwMatch && rResult) {
+//
+//                        int result = dao.deleteMember(loginUser);
+//                        if (result == 1) {
+//
+//                            JOptionPane.showMessageDialog(f, "탈퇴 처리 되었습니다. 메인화면으로 돌아갑니다.");
+//                            p01();
+//                        } else {
+//                            JOptionPane.showMessageDialog(f, "처리 실패. 다시 시도해주세요.");
+//                        }
+//                    } else if (pwMatch == false) {
+//                        JOptionPane.showMessageDialog(f, "비밀번호 오류. 다시 입력해주세요");
+//                    } else {
+//                        JOptionPane.showMessageDialog(f, "자동입력방지 값이 일치하지 않습니다.");
+//                    }
+//                } else {
+//                    JOptionPane.showMessageDialog(f, "주의사항을 다시 확인해주세요.");
+//                }
+//            }
+//        }); //b2.addActionListener
+//        //JFrame Visible처리
+//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        f.setVisible(true);
+//    } // p04_2() : 회원탈퇴
 
 
     public void p06() {
@@ -927,24 +932,24 @@ public class UI {
         f.add(l1);
 /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
-        JLabel l2 = new JLabel("관리하실 필터를 선택해 주세요.");
+        JLabel l2 = new JLabel("수정/삭제 버튼을 클릭하세요 .");
         //radio
-        ButtonGroup g1 = new ButtonGroup();
-        JRadioButton r1 = new JRadioButton("1번 필터");
-        JRadioButton r2 = new JRadioButton("2번 필터");
-        JRadioButton r3 = new JRadioButton("3번 필터");
+//        ButtonGroup g1 = new ButtonGroup();
+//        JRadioButton r1 = new JRadioButton("1번 필터");
+//        JRadioButton r2 = new JRadioButton("2번 필터");
+//        JRadioButton r3 = new JRadioButton("3번 필터");
 
-        JButton b1 = new JButton("수정: p06_1()로 이동");
+        JButton b1 = new JButton("수정버튼 1=예/ 0=아니오");
         JButton b2 = new JButton("삭제: p06()로 이동");
 
         f.add(b0);
         f.add(l2);
-        g1.add(r1);
-        g1.add(r2);
-        g1.add(r3);
-        f.add(r1);
-        f.add(r2);
-        f.add(r3);
+//        g1.add(r1);
+//        g1.add(r2);
+//        g1.add(r3);
+//        f.add(r1);
+//        f.add(r2);
+//        f.add(r3);
 
         f.add(b1);
         f.add(b2);
@@ -965,8 +970,8 @@ public class UI {
 
                 //
                 presetDto = presetDao.selectOne(presetNum);
-                presetDto.setPresetComfort(Integer.parseInt(JOptionPane.showInputDialog(null, "승차감 편함/보통", presetDto.getPresetComfort())));
-                presetDto.setPresetWeight(Integer.parseInt(JOptionPane.showInputDialog(null, "적재량 많음/적음", presetDto.getPresetWeight())));
+                presetDto.setPresetComfort(Integer.parseInt(JOptionPane.showInputDialog(null, "승차감 편함  / 보통 ", presetDto.getPresetComfort())));
+                presetDto.setPresetWeight(Integer.parseInt(JOptionPane.showInputDialog(null, "적재량 많음 / 적음 ", presetDto.getPresetWeight())));
                 presetDto.setPresetPassenger(Integer.parseInt(JOptionPane.showInputDialog(null, "승객3인 이상 O/X", presetDto.getPresetPassenger())));
 
 
@@ -1031,30 +1036,30 @@ public class UI {
         JButton b0 = new JButton("<-뒤로가기");
         JLabel l2 = new JLabel("사용할 필터를 선택해 주세요");
         //radio
-        ButtonGroup g1 = new ButtonGroup();
-        JRadioButton r1 = new JRadioButton("1번 필터");
-        JRadioButton r2 = new JRadioButton("2번 필터");
-        JRadioButton r3 = new JRadioButton("3번 필터");
-
-        JLabel l3 = new JLabel("선택하신 필터의 조건입니다.");
-        JLabel l4 = new JLabel("/ 승차감 l4.setText()");
-        JLabel l5 = new JLabel("/ 적재량 l5.setText()");
-        JLabel l6 = new JLabel("/ 탑승인원 l6.setText()");
+//        ButtonGroup g1 = new ButtonGroup();
+//        JRadioButton r1 = new JRadioButton("1번 필터");
+//        JRadioButton r2 = new JRadioButton("2번 필터");
+//        JRadioButton r3 = new JRadioButton("3번 필터");
+        // 라디오 버튼을 비활성화
+        JLabel l3 = new JLabel("선택 버튼 클릭 후 적용할 필터를 입력해주세요");
+//        JLabel l4 = new JLabel("/ 승차감 l4.setText()");
+//        JLabel l5 = new JLabel("/ 적재량 l5.setText()");
+//        JLabel l6 = new JLabel("/ 탑승인원 l6.setText()");
 
         JButton b1 = new JButton("선택: p07_1()로 이동");
 
         f.add(b0);
         f.add(l2);
-        g1.add(r1);
-        g1.add(r2);
-        g1.add(r3);
-        f.add(r1);
-        f.add(r2);
-        f.add(r3);
+//        g1.add(r1);
+//        g1.add(r2);
+//        g1.add(r3);
+//        f.add(r1);
+//        f.add(r2);
+//        f.add(r3);
         f.add(l3);
-        f.add(l4);
-        f.add(l5);
-        f.add(l6);
+//        f.add(l4);
+//        f.add(l5);
+//        f.add(l6);
 
         f.add(b1);
 
@@ -1069,9 +1074,11 @@ public class UI {
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String presetNum = JOptionPane.showInputDialog("적용하실 필터를 입력해 주세요");
+                String presetNum = JOptionPane.showInputDialog("적용하실 필터를 입력해 주세요 예)PR1");
                 PresetDao presetDao = new PresetDao();
                 PresetDto rsDto = presetDao.selectOne(presetNum);
+
+                JOptionPane.showMessageDialog(f,"선택하신 필터의 내용입니다." + rsDto);
                 if (rsDto == null) JOptionPane.showMessageDialog(f, presetNum + " 필터 조건을 불러오는데 실패하였습니다");
 
                 p07_1();
@@ -1108,7 +1115,7 @@ public class UI {
         JButton b1 = new JButton("필터 적용해제: p06()로 이동");
         // 검색버튼 구현
         //combobox
-        String[] g1 = {"차종", "차종분류", "취향"};
+        String[] g1 = {"차종", "차량가격", "주문가능여부"};
         JComboBox combo1 = new JComboBox(g1);
         JTextField t1 = new JTextField(20); // 10은 글자수
         JButton b11 = new JButton("검색");
@@ -1116,7 +1123,7 @@ public class UI {
         //
         JButton b2 = new JButton("필터 등록: p06_1()로 이동");
         JButton b3 = new JButton("필터 수정/삭제: p06_2()로 이동");
-        JButton b4 = new JButton("GV80 상세: p07_2()로 이동");
+        JButton b4 = new JButton("PR1 필터 정보 불러오기");
 
         f.add(b0);
         f.add(b1);
@@ -1159,9 +1166,26 @@ public class UI {
         b4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p07_2();
+                String tmp = "PR1";
+                PresetDao presetDao = new PresetDao();
+                PresetDto rsDto = presetDao.selectOne(tmp);
+                //rsDto를 다시 DAO를 통해 DB로보냄.
+                if(rsDto == null) JOptionPane.showMessageDialog(f, "[ERROR] 찾기에 실패하였습니다.");
+                else JOptionPane.showMessageDialog(f, rsDto);
+
             }
         }); //b4.addActionListener
+
+        b11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                ProductDao productDao = new ProductDao();
+                ArrayList<ProductDto> list = productDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, list.isEmpty() ? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]"+list));
+            }
+        });
 
 
         /////////////////////////////////////////////////////////
@@ -1171,7 +1195,8 @@ public class UI {
         f.setVisible(true);
     } // p07_1() : 필터활성화 후 상품조회
 
-    public void p07_2() {
+    public void p07_2(){
+
         //JFrame 정의
 //        f = new JFrame();
         f.getContentPane().removeAll();
@@ -1184,39 +1209,42 @@ public class UI {
         FlowLayout flow = new FlowLayout();
         f.setLayout(flow);
 
+
+
         //페이지제목
         JLabel l1 = new JLabel("p07_2 : 상품 정보 제공");
         Font font = new Font("맑은 고딕", Font.BOLD, 30);
         l1.setFont(font);
         f.add(l1);
 
+
+        ImageIcon ic = new ImageIcon("img/img001.png"); // 예시 이미지
+        JLabel img = new JLabel(ic);
+        f.add(img);
+
+
+        String[] g1 = {"차량고유번호", "차량이름", "차량유형"};
+        JComboBox combo1 = new JComboBox(g1);
+        JTextField t1 = new JTextField(20); // 10은 글자수
+        JButton b11 = new JButton("상세정보 조회");
+
+
+
         /////////////////////////////////////////////////////////
         JButton b0 = new JButton("<-뒤로가기");
-        //이미지
-        JLabel img1 = new JLabel("이미지");
-//        img1.setIcon(new ImageIcon("images/img.jpg"));
-        //
-        JLabel l2 = new JLabel("차종 l2.setText()");
-        JLabel l3 = new JLabel("/ 차종분류 l3.setText()");
-        JLabel l4 = new JLabel("/ 차종특징 l4.setText()");
-        JLabel l5 = new JLabel("/ 차량상태 l5.setText()");
-        JLabel l6 = new JLabel("/ 상품금액 l6.setText()");
-
         JButton b1 = new JButton("결제 후 이용: p08() 이동");
 
-        f.add(b0);
-        f.add(img1);
-        f.add(l2);
-        f.add(l3);
-        f.add(l4);
-        f.add(l5);
-        f.add(l6);
 
+        f.add(b0);
         f.add(b1);
+        f.add(b11);
+        f.add(t1);
+        f.add(combo1);
 
         b0.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 p07_1();
             }
         }); //b0.addActionListener
@@ -1227,6 +1255,17 @@ public class UI {
                 p08();
             }
         }); //b1.addActionListener
+
+        b11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String keyword = t1.getText();
+                String criteria = combo1.getSelectedItem().toString();
+                CarDao carDao = new CarDao();
+                ArrayList<CarDto> li = carDao.selectList(criteria, keyword);
+                JOptionPane.showMessageDialog(f, li.isEmpty()? "[요청하신 검색어에 대한 검색 결과가 존재하지 않습니다.]" : ("[요청하신 검색어에 대한 검색 결과입니다.]" + li));
+            }
+        });
 
         /////////////////////////////////////////////////////////
         //JFrame Visible처리

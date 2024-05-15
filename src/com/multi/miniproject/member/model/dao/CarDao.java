@@ -2,12 +2,14 @@ package com.multi.miniproject.member.model.dao;
 
 import com.multi.miniproject.common.DBConnectionMgr;
 import com.multi.miniproject.member.model.dto.CarDto;
+import com.multi.miniproject.member.model.dto.ProductDto;
 
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CarDao {
 
@@ -29,7 +31,7 @@ public class CarDao {
 
 
         try {
-            String sql = "INSERT INTO CARS VALUES('CN||CAR_NUM_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?";
+            String sql = "INSERT INTO CARS VALUES('C||CAR_NUM_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?";
             ps = con.prepareStatement(sql);
 
             ps.setString(1, cardto.getCarName());
@@ -38,7 +40,7 @@ public class CarDao {
             ps.setInt(4, cardto.getCarPrefComfort());
             ps.setInt(5, cardto.getCarPrefWeight());
             ps.setInt(6, cardto.getCarPrefPassenger());
-            ps.setString(7,cardto.getCarImg());
+
 
             result = ps.executeUpdate();
             if (result > 0) con.commit();
@@ -103,7 +105,6 @@ public class CarDao {
                 rsDto.setCarPrefComfort(rs.getInt("CAR_PREF_COMFORT"));
                 rsDto.setCarPrefWeight(rs.getInt("CAR_PREF_WEIGHT"));
                 rsDto.setCarPrefPassenger(rs.getInt("CAR_PREF_PASSENGER"));
-                rsDto.setCarImg(rs.getString("CAR_IMG"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -155,4 +156,42 @@ public class CarDao {
 
     }
 
+    public ArrayList<CarDto> selectList(String criteria, String keyword) {
+        ArrayList<CarDto> rsDtoList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "";
+            switch (criteria) { //검색조건
+                case "차량고유번호":
+                    sql += "SELECT * FROM CARS WHERE CAR_NUM = ?";
+                    break;
+                case "차량이름":
+                    sql += "SELECT * FROM CARS WHERE CAR_NAME = ?";
+                    break;
+                case "차량유형":
+                    sql += "SELECT * FROM CARS WHERE CAR_CATEGORY = ?";
+                    break;
+
+            }
+            ps = con.prepareStatement(sql);
+            ps.setString(1, keyword); //검색어
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CarDto carDto = new CarDto();
+                carDto.setCarNum(rs.getString("CAR_NUM"));
+                carDto.setCarName(rs.getString("CAR_NAME"));
+                carDto.setCarCategory(rs.getString("CAR_CATEGORY"));
+
+                rsDtoList.add(carDto);
+            }
+        } catch (SQLException e) {
+            System.out.println("selectList(Car)시 에러발생");
+        } finally {
+            dbcp.freeConnection(con, ps, rs);
+        }
+        return rsDtoList;
+    }
 }

@@ -427,9 +427,5 @@ public class MemberDao {
         return rsDtoList;
     } //selectList(Member) dev by HGKANG
 
-    public ArrayList<MemberDto> list() {
-        ArrayList<MemberDto> li = new ArrayList<>();
 
-        return li;
-    }
 }
