@@ -267,7 +267,7 @@ public class UI {
                     JOptionPane.showMessageDialog(f, "로그인 성공");
                     loginUser = memberDao.selectOne(id).getMemberNum();
                     if(memberDao.loginUser(loginUser).getAdmin()==1) {
-                        p03B();
+                        new AdminPage().p03B();
                     }else{
                         p03();
                     }
