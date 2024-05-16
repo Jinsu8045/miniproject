@@ -60,7 +60,8 @@ public class Mypage extends UI{
         b0.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p03();
+                UI ui = new UI();
+                ui.p03();
                 f.setVisible(false);
             }
         }); //b0.addActionListener

@@ -26,6 +26,7 @@ public class ReviewPage extends UI{
     public void p05() {
         //JFrame 정의
 //        f = new JFrame();
+        System.out.println(loginUser);
 
 
         f.getContentPane().removeAll();
@@ -81,7 +82,7 @@ public class ReviewPage extends UI{
         }
 
         model = new DefaultTableModel(data, header);
-       table = new JTable(model);
+        table = new JTable(model);
 
         final JScrollPane[] scroll = new JScrollPane[1];
         scroll[0] = new JScrollPane(table);

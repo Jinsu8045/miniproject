@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class UI {
     JFrame f = new JFrame();
-    String loginUser =null;
+    static String loginUser =null;
 
     String selectRowNo = "null";
     String selectRowNoTmp = "null";
@@ -278,6 +278,7 @@ public class UI {
                 if (result) {
                     JOptionPane.showMessageDialog(f, "로그인 성공");
                     loginUser = memberDao.selectOne(id).getMemberNum();
+                    System.out.println(loginUser);
                     if (memberDao.loginUser(loginUser).getAdmin() == 1) {
                         new AdminPage().p03B();
                         f.setVisible(false);

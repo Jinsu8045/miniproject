@@ -108,15 +108,13 @@ public class MemberDto {
     @Override
     public String toString() {
         return "MemberDto{" +
-                "memberNum=" + memberNum +
+                "memberNum='" + memberNum + '\'' +
                 ", id='" + id + '\'' +
                 ", pw='" + pw + '\'' +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
                 ", admin=" + admin +
+                ", emailID='" + emailID + '\'' +
+                ", emailSite='" + emailSite + '\'' +
                 '}';
     }
-
-
-
 }
