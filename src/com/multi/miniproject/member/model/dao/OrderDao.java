@@ -79,12 +79,42 @@ public class OrderDao {
         return rsDto;
     } //getMemberDto() : OrderDto를 파라미터로 넣으면 이것에 대응되는 MemberDto를 리턴해주는 함수
 
+
+    public int insertOrder(OrderDto order) {
+        int result = 0;
+        PreparedStatement ps = null;
+
+        try {
+            String sql = "INSERT INTO ORDERS VALUES('O'||ORDER_NUM_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, order.getMemberNum());
+            ps.setString(2, order.getProductNum());
+            ps.setInt(3, order.getOrderStatus());
+            ps.setInt(4, order.getOrderRefundRequest());
+            ps.setInt(5, order.getOrderRefundComplete());
+
+            result = ps.executeUpdate();
+            if (result > 0) con.commit();
+            else con.rollback();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("insert(Order)시 에러발생");
+
+        } finally {
+            dbcp.freeConnection(con, ps);
+        }
+
+        return result;
+    } //insert(Order)
+
     public int delete(String orderNum) {
         int result = 0;
         PreparedStatement ps = null;
 
         try {
-            String sql = "DELETE FROM ORDERS WHERE ORDER_NUM = ? AND ORDER_REFUND_REQUEST = 1";
+//            String sql = "DELETE FROM ORDERS WHERE ORDER_NUM = ? AND ORDER_REFUND_REQUEST = 1";
+            String sql = "DELETE FROM ORDERS WHERE ORDER_NUM = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, orderNum);
 

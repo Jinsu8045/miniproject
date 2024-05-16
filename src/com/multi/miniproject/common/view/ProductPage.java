@@ -707,6 +707,7 @@ public class ProductPage extends UI {
         ProductDao productDao = new ProductDao();
         ProductDto productDto = productDao.selectOne(selectRowNo);
         CarDto carDto = productDao.getCarDto(productDto);
+//        UI().productAmount= productDto.getProductPrice();
 
         System.out.println(carDto.getCarImageAddress());
         ImageIcon ic = new ImageIcon("img/" + carDto.getCarImageAddress()); // 예시 이미지

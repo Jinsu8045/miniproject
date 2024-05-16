@@ -16,6 +16,7 @@ public class OrderDto {
     private int orderStatus;
     private int orderRefundRequest;
     private int orderRefundComplete;
+    private int paymentAmount; //임시
 
     public OrderDto() {
     }
@@ -75,6 +76,14 @@ public class OrderDto {
 
     public void setOrderRefundComplete(int orderRefundComplete) {
         this.orderRefundComplete = orderRefundComplete;
+    }
+
+    public int getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(int paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
     @Override
