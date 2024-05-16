@@ -277,8 +277,24 @@ public class AdminPage extends UI {
 
                 // DAO를 거친 후 result값 리턴받기
                 int result = memberDao.deleteMember(memberNum);
-                if (result == 1) JOptionPane.showMessageDialog(f, "해당 회원이 탈퇴처리되었습니다.");
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(f, "해당 회원이 탈퇴처리되었습니다.");
+                    model.setRowCount(0); // 기존 테이블 모델의 행 제거
+                    ArrayList<MemberDto> list = memberDao.selectListAll();
+                    for (int i=0; i<list.size(); i++) {
+                        model.addRow(new Object[]{
+                                list.get(i).getId(),
+                                list.get(i).getName(),
+                                list.get(i).getEmail(),
+                                "상세"
+                        });
+                    }
+
+                }
+
                 else JOptionPane.showMessageDialog(f, "[ERROR] 해당 회원이 탈퇴처리되지 못했습니다.");
+
+
             }
         }); //b3.addActionListener
 
