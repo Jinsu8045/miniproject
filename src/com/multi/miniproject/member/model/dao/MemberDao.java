@@ -190,7 +190,7 @@ public class MemberDao {
                 rsDto.setName(rs.getString("NAME"));
                 rsDto.setEmailID(rs.getString("EMAIL_ID")); //5/13수정
                 rsDto.setEmailSite(rs.getString("EMAIL_SITE"));
-                rsDto.setEmail();// 제거예정
+//                rsDto.setEmail();// 제거예정
                 rsDto.setAdmin(rs.getInt("ADMIN"));
 //                System.out.println(rsDto);
             }
@@ -232,7 +232,7 @@ public class MemberDao {
                 rsDto.setName(rs.getString("NAME"));
                 rsDto.setEmailID(rs.getString("EMAIL_ID")); //5/13수정
                 rsDto.setEmailSite(rs.getString("EMAIL_SITE"));
-                rsDto.setEmail();//제거예정
+//                rsDto.setEmail();//제거예정
                 rsDto.setAdmin(rs.getInt("ADMIN"));
             }
 
@@ -355,7 +355,7 @@ public class MemberDao {
                 memberDto.setEmailSite(rs.getString("EMAIL_SITE"));
                 memberDto.setAdmin(rs.getInt("ADMIN"));
 
-                memberDto.setEmail(); //KHG CHECK
+//                memberDto.setEmail(); //KHG CHECK
                 rsDtoList.add(memberDto);
             }
         } catch(SQLException e) {
@@ -415,7 +415,7 @@ public class MemberDao {
                 memberDto.setEmailSite(rs.getString("EMAIL_SITE"));
                 memberDto.setAdmin(rs.getInt("ADMIN"));
 
-                memberDto.setEmail(); //KHG CHECK
+//                memberDto.setEmail(); //KHG CHECK
                 rsDtoList.add(memberDto);
             }
         } catch(SQLException e) {

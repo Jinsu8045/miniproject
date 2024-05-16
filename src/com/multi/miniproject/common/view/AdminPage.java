@@ -159,7 +159,7 @@ public class AdminPage extends UI {
             model.addRow(new Object[]{
                     list.get(i).getId(),
                     list.get(i).getName(),
-                    list.get(i).getEmail(),
+                    list.get(i).getEmailID()+list.get(i).getEmailSite(),
                     "상세"
             });
         }
@@ -250,7 +250,7 @@ public class AdminPage extends UI {
                         model.addRow(new Object[]{
                                 list.get(i).getId(),
                                 list.get(i).getName(),
-                                list.get(i).getEmail(),
+                                list.get(i).getEmailID()+list.get(i).getEmailSite(),
                                 "상세"
                         });
                     }

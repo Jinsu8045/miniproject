@@ -29,7 +29,7 @@ public class MemberDto {
         this.name = name;
         this.emailID = emailID;
         this.emailSite = emailSite;
-        setEmail();
+//        setEmail();
     }
 
     public String getMemberNum() {
@@ -64,14 +64,14 @@ public class MemberDto {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
+//    public String getEmail() {
+//        return email;
+//    }
 
-    public void setEmail() {
-        this.email = getEmailID()+getEmailSite();
-        // emailSite에 @를 넣을지 말지 논의하는 것도 필요할 듯해요!
-    }
+//    public void setEmail() {
+//        this.email = getEmailID()+getEmailSite();
+//        // emailSite에 @를 넣을지 말지 논의하는 것도 필요할 듯해요!
+//    }
     // 강현구 : 이메일을 쪼개어 고려한 후 합친형태도 좋은 시도인거같습니다!!
     // 1) 다만 제생각에는 바꿔주신 (void) setEmail() 보다는
     // 기존의 (String) setEmail(this.getEmailID()+'@'+this.getEmailSite()); 를 필요할 때마다 한번 더 코딩하는 게 나은 거 같아요.

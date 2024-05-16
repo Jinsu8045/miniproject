@@ -38,7 +38,7 @@ public class Mypage extends UI{
         JButton b0 = new JButton("<-뒤로가기");
         JLabel l2 = new JLabel("이름 : " + dao.loginUser(loginUser).getName());
         JLabel l3 = new JLabel("아이디(이메일) :" + dao.loginUser(loginUser).getId() +
-                "(" + dao.loginUser(loginUser).getEmail() + ")");
+                "(" + dao.loginUser(loginUser).getEmailSite() + ")");
         //이미지
         JLabel img1 = new JLabel("          ");
         img1.setIcon(new ImageIcon("images/img.png"));
@@ -61,6 +61,7 @@ public class Mypage extends UI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 p03();
+                f.setVisible(false);
             }
         }); //b0.addActionListener
 
